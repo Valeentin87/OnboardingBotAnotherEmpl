@@ -4,6 +4,7 @@ import time
 from bot.adapters.max.keyboards import next_to_education_kb, tomorrow_kb
 from bot.adapters.max.create_bot import logger
 from core.content import (
+    get_change_course_text,
     get_change_date_text,
     get_start_text,
     get_about_company_text,
@@ -26,6 +27,15 @@ async def flow_start(send):
     отправить приветственное сообщение.
     """
     text = get_start_text()
+    await send(text)
+    
+
+async def flow_start_change_kb(send):
+    """
+    Стартовый сценарий:
+    выбрать курс обучения.
+    """
+    text = get_change_course_text()
     await send(text)
 
 

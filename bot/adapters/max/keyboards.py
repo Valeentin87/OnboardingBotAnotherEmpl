@@ -19,6 +19,16 @@ def test_abcd_keyboard():
     return kb.to_list()
 
 
+def change_course_kb():
+    """Клавиатура для выбора курса обучения
+    """
+    kb = KeyboardBuilder()
+    kb.row(CallbackButton(text="👨‍💻 Менеджер по продажам", payload="sales_manager"))
+    kb.row(CallbackButton(text="🎯 Другой сотрудник", payload="another_employer"))
+    
+    return kb.to_list()
+
+
 def main_menu_keyboard():
     """
     Главное меню для MAX:
@@ -35,6 +45,7 @@ def main_menu_keyboard():
         CallbackButton(text="🏆 Рейтинг", payload="raiting"),
     )
     kb.row(CallbackButton(text="❓ Задать вопрос", payload="send_question"))
+    kb.row(CallbackButton(text="🔄 Выбрать другой отдел", payload="change_course_name"))
     return kb.to_list()
 
 
