@@ -149,7 +149,7 @@ class GigaChatService:
                 credentials=self.credentials,
                 scope=self.scope,
                 model=self.model,
-                verify_ssl_certs=True
+                verify_ssl_certs=False
                 # max_tokens=32768,  # максимальный для GigaChat 2 Max
                 # temperature=0.2,
             ) as giga:
@@ -204,7 +204,7 @@ class GigaChatService:
                 credentials=self.credentials,
                 scope=self.scope,
                 model=self.model,
-                verify_ssl_certs=True,
+                verify_ssl_certs=False,
                 # max_tokens=2048,  # ответ оценки всегда короткий JSON
                 # temperature=0.3,
             ) as giga:

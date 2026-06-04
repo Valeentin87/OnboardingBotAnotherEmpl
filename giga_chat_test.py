@@ -74,7 +74,7 @@ AUTH_KEY = os.getenv('AUTHORIZATION_KEY')
 print(f'{AUTH_KEY=}')
 
 
-with GigaChat(credentials=AUTH_KEY, verify_ssl_certs=True, scope='GIGACHAT_API_CORP', model='GigaChat-2-Max') as giga:
+with GigaChat(credentials=AUTH_KEY, verify_ssl_certs=False, scope='GIGACHAT_API_CORP', model='GigaChat-2-Max') as giga:
   response=giga.chat(
       Chat(
         messages=[

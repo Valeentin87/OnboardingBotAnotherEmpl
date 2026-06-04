@@ -1,11 +1,14 @@
 import asyncio
 import time
+from aiomax.fsm import FSMCursor
 #import logging
 from bot.adapters.max.keyboards import next_to_education_kb, tomorrow_kb
 from bot.adapters.max.create_bot import logger
 from core.content import (
+    get_another_emp_training_info_text,
     get_change_course_text,
     get_change_date_text,
+    get_first_mess_another_empl,
     get_start_text,
     get_about_company_text,
     get_sales_training_intro_text,
@@ -26,9 +29,12 @@ async def flow_start(send):
     Стартовый сценарий:
     отправить приветственное сообщение.
     """
+    #state_name = cursor.get_state()
     text = get_start_text()
-    await send(text)
     
+    #if state_name == "another_employer":
+    await send(text=text)
+     
 
 async def flow_start_change_kb(send):
     """
@@ -47,8 +53,10 @@ async def flow_about_company(send):
     info = get_change_date_text()
     
     await send(text)
-    await asyncio.sleep(30)  # 5 секунд 
+    await asyncio.sleep(5)  # 30 секунд !!!!!!
+    
     tom_kb = tomorrow_kb
+       
     logger.info("Пытаюсь отправить info")
     await send(info, with_keyboard=tom_kb)
     
@@ -72,6 +80,28 @@ async def flow_sales_training_intro(send, user_name: str = "коллега"):
         await send(info, with_keyboard=next_kb)
     except Exception as e:
         logger.error(f"[flow_sales_training_intro] произошла ошибка {e}")
+
+
+async def flow_another_emp_training_intro(send, user_name: str = "коллега"):
+    """
+    Сценарий '💼 Обучение по продукту' (ШАГ 1 + инфо).
+    """
+    try:
+        logger.info("[flow_another_emp_training_intro] стартовал")
+        intro = get_first_mess_another_empl()
+        #intro = get_sales_training_intro_text(user_name)
+        #info = get_change_date_text()
+        info = get_another_emp_training_info_text()
+        logger.info(f"{intro=}\n{info=}")
+        logger.info("Пытаюсь отправить intro")
+        await send(intro, with_keyboard="clear")
+        await asyncio.sleep(10)  # 30 секунд 
+        # Паузы, задержки и т.п. — в адаптере (MAX), чтобы не блокировать CORE.
+        next_kb = next_to_education_kb
+        logger.info("Пытаюсь отправить info")
+        await send(info, with_keyboard=next_kb)
+    except Exception as e:
+        logger.error(f"[flow_another_emp_training_intro] произошла ошибка {e}")
     
 
 # async def flow_course_intro(send):

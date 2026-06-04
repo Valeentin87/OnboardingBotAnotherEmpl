@@ -46,5 +46,9 @@
   "50076911": {
     "start_date": "14.05",
     "reminder_sent": false
+  },
+  "175082514": {
+    "start_date": "05.06",
+    "reminder_sent": true
   }
 }

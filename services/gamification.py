@@ -7,11 +7,13 @@ from bot.adapters.max.create_bot import logger
 
 
 class GamificationService:
-    def __init__(self):
+    def __init__(self, current_course: str = "Обучение по продажам"):
         self.progress_file = 'data/progress.json'
         self.total_lessons_info = {
-            "Обучение по продажам": 43
+            "Обучение по продажам": 43,
+            "Другой сотрудник": 7
         }
+        self.current_course = current_course
         os.makedirs('data', exist_ok=True)
     
     def _load_data(self) -> Dict:
@@ -90,9 +92,12 @@ class GamificationService:
             if not course_data:
                 logger.warning(f'[WARNING][GamificationService][get_user_progress] '
                         f'Для пользователя {user_id} не найдены данные курса {course_name}, используем дефолтные значения')
+                
+                total_lessons = self.total_lessons_info[self.current_course]
+                
                 course_data = {
                     'lessons_completed': 0,
-                    'total_lessons': 43,
+                    'total_lessons': total_lessons,
                     'correct_answers': 0,
                     'total_answers': 0,
                     'accuracy_percent': 0.0
@@ -161,12 +166,13 @@ class GamificationService:
             data[user_key]['lesson_results'] = {}
         
         # Получаем текущий прогресс по курсу
-        logger.info(f'[INFO][GamificationService][update_lesson_progress] Получаем текущий прогресс по курсу')
+        logger.info(f'[INFO][GamificationService][update_lesson_progress] Получаем текущий прогресс по курсу {course_name=}')
         if course_name not in data[user_key]['courses']:
             logger.info(f'[INFO][GamificationService][update_lesson_progress] Пользователь еще не проходил этот курс')
+            total_lessons = self.total_lessons_info[self.current_course]
             data[user_key]['courses'][course_name] = {
                 'lessons_completed': 0,
-                'total_lessons': 43,
+                'total_lessons': total_lessons,
                 'correct_answers': 0,
                 'total_answers': 0,
                 'accuracy_percent': 0.0
@@ -176,12 +182,14 @@ class GamificationService:
         logger.info(f'[INFO][GamificationService][update_lesson_progress] {course_progress=}')
         
         # Проверяем, был ли урок уже пройден
-        is_first_attempt = lesson_id not in data[user_key]['lesson_results']
+        info_dict = data[user_key]['lesson_results']
+        course_result_flag = info_dict.setdefault(course_name, {})
+        is_first_attempt = lesson_id not in data[user_key]['lesson_results'][course_name]
         
         if not is_first_attempt:
             logger.info(f'[INFO][GamificationService][update_lesson_progress] повторная попытка — вычитаем старый результат')
             # Если повторная попытка — вычитаем старый результат
-            old_result = data[user_key]['lesson_results'][lesson_id]
+            old_result = data[user_key]['lesson_results'][course_name][lesson_id]
             old_correct = old_result.get('correct_count', 0)
             old_total = old_result.get('total_count', 0)
             
@@ -206,7 +214,7 @@ class GamificationService:
             course_progress['accuracy_percent'] = 0.0
         
         # Сохраняем результат урока
-        data[user_key]['lesson_results'][lesson_id] = {
+        data[user_key]['lesson_results'][course_name][lesson_id] = {
             'correct_count': correct_count,
             'total_count': total_count,
             'accuracy': round((correct_count / total_count * 100), 1) if total_count > 0 else 0
@@ -419,7 +427,7 @@ class GamificationService:
         user_key = str(user_id)
 
         # Добавляем отметку о просмотре
-        data[user_key]['lesson_results'][video_section_id] = {
+        data[user_key]['lesson_results'][course_name][video_section_id] = {
             'viewed_flag': 1
         }
         logger.info(f'[INFO][GamificationService][mark_video_section_viewed] '
@@ -663,11 +671,12 @@ class GamificationService:
             logger.warning(f'[WARNING][GamificationService][reset_user_course_progress] '
                     f'Курс {course_name} не найден для пользователя {user_id}')
             # Инициализируем курс с дефолтными значениями, если его нет
+            total_lessons = 43 if course_name == "Обучение по продажам" else 7
             if 'courses' not in data[user_key]:
                 data[user_key]['courses'] = {}
             data[user_key]['courses'][course_name] = {
                 'lessons_completed': 0,
-                'total_lessons': 43,
+                'total_lessons': total_lessons,
                 'correct_answers': 0,
                 'total_answers': 0,
                 'accuracy_percent': 0.0
@@ -676,16 +685,16 @@ class GamificationService:
             # Сбрасываем прогресс по курсу
             data[user_key]['courses'][course_name] = {
                 'lessons_completed': 0,
-                'total_lessons': 43,
+                'total_lessons': total_lessons,
                 'correct_answers': 0,
                 'total_answers': 0,
                 'accuracy_percent': 0.0
             }
 
         # Очищаем словарь lesson_results
-        data[user_key]['lesson_results'] = {}
+        data[user_key]['lesson_results'][course_name] = {}
         logger.info(f'[INFO][GamificationService][reset_user_course_progress] '
-                f'lesson_results очищен для пользователя {user_id}')
+                f'lesson_results очищен для пользователя {user_id} по курсу {course_name}')
 
         # Сохраняем изменения
         self._save_data(data)

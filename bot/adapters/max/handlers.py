@@ -21,9 +21,9 @@ from aiomax import bot
 
 from bot.adapters.max.data_utils import format_progress_attempts, get_max_accuracy_item, load_user_data, save_reminder, save_user_data, validate_name_surname
 from bot.adapters.max.test_utils import get_block_2_test_1_quests, get_block_2_test_2_quests, get_block_2_test_3_quests, get_block_3_test_1_quests, get_block_3_test_2_quests, get_block_3_test_3_quests, get_block_3_test_4_quests, get_block_3_test_5_quests, get_block_3_test_6_quests, get_block_4_test_1_quests, get_block_4_test_2_quests, get_block_4_test_3_quests, get_block_4_test_4_quests, get_final_test_block_1, get_final_test_block_2, get_final_test_block_3, get_final_test_block_4, get_final_test_block_5, get_final_test_block_6, get_final_test_block_7, get_testing_data_1, get_testing_data_2, get_testing_data_3, get_testing_data_4, get_testing_data_5, get_testing_data_6
-from bot.adapters.max.utils_FSM import OnboardingStates, TrainingStates, UserInfo
-from bot.core.onboarding_flow import flow_about_company, flow_sales_training_intro, flow_start, flow_start_change_kb
-from core.content import get_block1_intro_text, get_block1_section1_intro_text, get_block1_section2_intro_text, get_block1_section_3_intro_text, get_block1_section_4_intro_text, get_block1_section_5_intro_text, get_block1_section_6_intro_text, get_block2_intro_text, get_block2_section1_intro_text, get_block2_section_2_intro_text, get_block2_section_3_intro_text, get_block2_section_4_intro_text, get_block3_intro_text, get_block3_section_1_intro_text, get_block3_section_2_intro_text, get_block3_section_3_intro_text, get_block3_section_4_intro_text, get_block3_section_5_intro_text, get_block3_section_6_intro_text, get_block4_intro_text, get_block4_section_1_intro_text, get_block4_section_2_intro_text, get_block4_section_3_intro_text, get_block4_section_4_intro_text, get_block5_intro_text, get_block5_intro_video1, get_block5_intro_video10, get_block5_intro_video11, get_block5_intro_video12, get_block5_intro_video13, get_block5_intro_video14, get_block5_intro_video15, get_block5_intro_video2, get_block5_intro_video3, get_block5_intro_video4, get_block5_intro_video5, get_block5_intro_video6, get_block5_intro_video7, get_block5_intro_video8, get_block5_intro_video9, get_block6_intro_text, get_block6_section_1_intro_text, get_block7_intro_text, get_change_course_text, get_course_intro_text, get_final_intro_text, get_first_day_congrats_text, get_reminder_text, get_start_text, get_text_start_final_test_block_1, get_text_start_final_test_block_2, get_text_start_final_test_block_3, get_text_start_final_test_block_4, get_text_start_final_test_block_5, get_text_start_final_test_block_6, get_text_to_final_test_block_1, get_text_to_final_test_block_2, get_text_to_final_test_block_3, get_text_to_final_test_block_4, get_text_to_final_test_block_5, get_text_to_final_test_block_6, get_text_to_final_test_block_7, get_tomorrow_reminder_text, get_training_step_3_text, go_to_test_1_text
+from bot.adapters.max.utils_FSM import AnotherEmployerStates, OnboardingStates, TrainingStates, UserInfo
+from bot.core.onboarding_flow import flow_about_company, flow_another_emp_training_intro, flow_sales_training_intro, flow_start, flow_start_change_kb
+from core.content import get_another_emp_intro_text, get_block1_intro_text, get_block1_section1_intro_text, get_block1_section2_intro_text, get_block1_section_3_intro_text, get_block1_section_4_intro_text, get_block1_section_5_intro_text, get_block1_section_6_intro_text, get_block2_intro_text, get_block2_section1_intro_text, get_block2_section_2_intro_text, get_block2_section_3_intro_text, get_block2_section_4_intro_text, get_block3_intro_text, get_block3_section_1_intro_text, get_block3_section_2_intro_text, get_block3_section_3_intro_text, get_block3_section_4_intro_text, get_block3_section_5_intro_text, get_block3_section_6_intro_text, get_block4_intro_text, get_block4_section_1_intro_text, get_block4_section_2_intro_text, get_block4_section_3_intro_text, get_block4_section_4_intro_text, get_block5_intro_text, get_block5_intro_video1, get_block5_intro_video10, get_block5_intro_video11, get_block5_intro_video12, get_block5_intro_video13, get_block5_intro_video14, get_block5_intro_video15, get_block5_intro_video2, get_block5_intro_video3, get_block5_intro_video4, get_block5_intro_video5, get_block5_intro_video6, get_block5_intro_video7, get_block5_intro_video8, get_block5_intro_video9, get_block6_intro_text, get_block6_section_1_intro_text, get_block7_intro_text, get_change_course_text, get_course_intro_text, get_final_another_emp_text, get_final_intro_text, get_first_day_congrats_text, get_first_mess_another_empl, get_reminder_text, get_start_text, get_text_start_final_test_block_1, get_text_start_final_test_block_2, get_text_start_final_test_block_3, get_text_start_final_test_block_4, get_text_start_final_test_block_5, get_text_start_final_test_block_6, get_text_to_final_test_block_1, get_text_to_final_test_block_2, get_text_to_final_test_block_3, get_text_to_final_test_block_4, get_text_to_final_test_block_5, get_text_to_final_test_block_6, get_text_to_final_test_block_7, get_tomorrow_reminder_text, get_training_step_3_text, go_to_test_1_text
 from bot.adapters.max.keyboards import change_course_kb, change_course_to_export_stat_kb, continue_studying_kb, education_kb, final_start_test_kb, final_test_kb, finish_studying_kb, main_menu_keyboard, main_one_kb, next_to_educ_to_part_kb, next_to_education_kb, start_test_kb, test_abcd_keyboard, variants_questions_kb, yes_no_kb
 #from services.claude_api import ClaudeService
 from services.ExelStatisticGenerator import ExcelStatisticGenerator
@@ -40,11 +40,16 @@ REMINDERS_FILE = "data/reminders.json"
 NAME_DATA_FILE = "data/name_surname.json"
 
 COURSES_NAMES = {"Обучение по продажам": 'sales_training',
-                 "Другой сотрудник": 'nother_employee'}
+                 "Другой сотрудник": 'another_employee'}
 
 
 router = Router()
 
+
+def get_current_course(cursor: FSMCursor):
+    """Возвращает название курса обучения"""
+    cursor_data = cursor.get_data()
+    return cursor_data.get("current_course")
 
 @router.on_button_callback(lambda data: data.payload == "sales_manager")
 async def sales_manager_start_handl(ctx: Callback, cursor: FSMCursor):
@@ -67,14 +72,17 @@ async def another_employer_start_handl(ctx: Callback, cursor: FSMCursor):
     data = cursor.get_data()
     logger.info(f'{data=}')
     cursor.change_data({"current_course": "Другой сотрудник"})
-    await start_command(ctx, cursor)
+    cursor.change_state(AnotherEmployerStates.user_type)
+    await start_command(ctx, cursor, user_type = "another_employer")
     
+
 
 @router.on_button_callback(lambda data: data.payload == "change_course_name")
 async def change_course_name_handl(ctx: Callback, cursor: FSMCursor):
     """Обработчик нажатия кнопки ВЫБРАТЬ ДРУГОЙ ОТДЕЛ"""
     await ctx.message.delete()
     cursor.change_data({"current_course" : None})
+    cursor.clear_state()
     text = get_change_course_text()
     
     await ctx.send(text=text, keyboard=change_course_kb())
@@ -82,7 +90,7 @@ async def change_course_name_handl(ctx: Callback, cursor: FSMCursor):
 
 @router.on_bot_start()
 @router.on_command('start')
-async def start_command(ctx: CommandContext, cursor: FSMCursor):
+async def start_command(ctx: CommandContext, cursor: FSMCursor, user_type:str = "manager"):
     """Обработчик команды старт"""
     try:
         logger.info(f'[INFO][start_command] Стартовал')
@@ -95,6 +103,7 @@ async def start_command(ctx: CommandContext, cursor: FSMCursor):
             second_name = user_data[user_id]["second_name"]
             logger.info(f'[INFO][start_command] Данные о пользователе уже есть в name_surname.json {user_id=}')
             if not cursor_data:
+                logger.info(f'Строка 99')
                 await ctx.send(f"Здравствуйте, {first_name} {second_name}!")
             
                 
@@ -109,16 +118,22 @@ async def start_command(ctx: CommandContext, cursor: FSMCursor):
         async def change_course_send(text: str):
             await ctx.send(text, keyboard=change_course_kb(), format="html")
         
-        async def send(text: str):
-            await ctx.send(text, keyboard=main_menu_keyboard())
+        async def send(text: str, cursor: FSMCursor = cursor):
+            state_name = cursor.get_state()
+            if state_name == "another_employer":
+                await ctx.send(text, keyboard=main_menu_keyboard(educ_button_name = "Обучение по продукту"))
+            else:
+                await ctx.send(text, keyboard=main_menu_keyboard(educ_button_name = "Обучение по продажам"))
 
         data = cursor.get_data()
+        logger.info(f'{data=}')
         if data:
             if "current_course" in data and data.get("current_course") == "Обучение по продажам":
                 await flow_start(send)
                 return
             
             if "current_course" in data and data.get("current_course") == "Другой сотрудник":
+                cursor.change_state(AnotherEmployerStates.user_type)
                 await flow_start(send)
                 return
         
@@ -214,7 +229,11 @@ async def raiting_command(ctx: CommandContext | Callback, cursor: FSMCursor):
             await ctx.message.delete()
         
         game = GamificationService()
-        course_name = "Обучение по продажам"
+        
+        current_course = get_current_course(cursor)
+        
+        course_name = "Обучение по продажам" if current_course != "Другой сотрудник" else "Другой сотрудник"
+        logger.info(f'{course_name=}')
         
         # Получаем топ пользователей
         logger.info(f'[INFO][raiting_command] Получаем топ пользователей')
@@ -364,8 +383,11 @@ async def my_progress_handler(ctx: CommandContext | Callback, cursor: FSMCursor)
             await ctx.message.delete()
         
         game = GamificationService()
-                    
+            
         course_name = "Обучение по продажам"
+        current_course = get_current_course(cursor)
+        if current_course == 'Другой сотрудник':
+            course_name = current_course
         progress = game.get_user_progress(ctx.user_id, course_name)
         
         logger.info(
@@ -640,6 +662,10 @@ async def send(message: Message | Callback, out: str, with_keyboard: bool = Fals
 async def about_company_handler(callback: Callback, cursor: FSMCursor):
     """Обработчик нажатия на кнопку 🏢 О компании """
     try:
+        
+        state_name = cursor.get_state()
+        logger.info(f'{state_name=}')
+        
         await flow_about_company(lambda t, with_keyboard="clear": send(callback, t, with_keyboard))
         
         cursor.change_state(OnboardingStates.waiting_for_start_date)
@@ -653,6 +679,9 @@ async def about_company_handler(callback: Callback, cursor: FSMCursor):
 async def start_tomorrow_handler(callback: Callback, cursor: FSMCursor):
     """Обработчик нажатия на кнопку `🚀 Выхожу завтра`"""
     try:
+        cursor_data = cursor.get_data()
+        logger.info(f'{cursor_data=}')
+        
         # Пользователь выходит завтра - сразу присылаем напоминание   
         tomorrow = datetime.now() + timedelta(days=1)
         date_str = tomorrow.strftime("%d.%m")
@@ -679,11 +708,16 @@ async def start_tomorrow_handler(callback: Callback, cursor: FSMCursor):
             json.dump(reminders, f, ensure_ascii=False, indent=2)
         logger.info(f"[start_tomorrow_handler] Напоминание сохранено и СРАЗУ помечено как отправленное")
         
-        
+        current_course = cursor_data.get("current_course")
         # Сразу отправляем напоминание
-        text = get_tomorrow_reminder_text(date_str)
+                
+        if current_course == "Другой сотрудник":
+            cursor.change_state(AnotherEmployerStates.user_type)
+            current_course = "Обучение по продукту"
+            
+        text = get_tomorrow_reminder_text(date_str, current_course)
         
-        await callback.send(text, keyboard=education_kb())
+        await callback.send(text, keyboard=education_kb(current_cource = current_course))
         #cursor.clear()
     except Exception as e:
         logger.error(f"[start_tomorrow_handler] Произошла ошибка {e}")
@@ -716,6 +750,7 @@ async def input_date_handler(message: Message, cursor: FSMCursor):
               
         user_input = message.body.text
         data = cursor.get_data()
+        current_course = data.get("current_course")
         logger.info(f"[input_date_handler] {data=} {type(data)=}")
         logger.info(f"[input_date_handler] Вы ввели дату выхода на работу: {user_input}")
         day, month = map(int, user_input.split('.'))
@@ -733,7 +768,7 @@ async def input_date_handler(message: Message, cursor: FSMCursor):
         
         logger.info(f"[input_date_handler] {date_str=} {dt=}")
         
-        cursor.change_data({"start_date": date_str, "parsed_date":dt})
+        cursor.change_data({"start_date": date_str, "parsed_date":dt, "current_course": current_course})
         
         months_ru = {
             1: "января", 2: "февраля", 3: "марта", 4: "апреля", 5: "мая", 6: "июня",
@@ -762,7 +797,9 @@ async def confirm_date_handler(callback: Callback, cursor: FSMCursor):
     try:
         logger.info(f"[confirm_date_handler] Стартовал")
         data = cursor.get_data()
+        logger.info(f'{data=}')
         start_date_str = data.get("start_date")
+        current_course = data.get("current_course")
         
         if callback.payload == "yes":
         
@@ -773,11 +810,17 @@ async def confirm_date_handler(callback: Callback, cursor: FSMCursor):
             #     return
             
             text = get_reminder_text(start_date_str)
-            
-            await callback.send(text, keyboard=main_menu_keyboard())
-            
-            cursor.clear_state()
-            
+            if current_course == "Другой сотрудник":
+                current_course = "Обучение по продукту"
+                text = get_reminder_text(start_date_str, current_course)
+                await callback.send(text, keyboard=main_menu_keyboard("Обучение по продукту"))
+                state_name = cursor.get_state()
+                logger.info(f'{state_name=}')
+                cursor.change_state(AnotherEmployerStates.user_type)
+            else:
+                await callback.send(text, keyboard=main_menu_keyboard())
+                cursor.clear_state()
+                 
         elif callback.payload == "no":  # пользователь отклонил дату
             
             await callback.send("📝 Напишите правильную дату вашего первого рабочего дня в формате ДД.ММ\n\n"
@@ -830,13 +873,19 @@ async def show_course_intro_handler(callback: Callback, cursor: FSMCursor):
         # if await debounce_button_max(callback, cursor):
         #     logger.info(f"[show_course_intro_handler] Идет обработка нажмите позднее")
         #     return
-        await callback.message.delete()
-        text = get_course_intro_text()
-        await callback.send(text)
-        # 2) Через 15 секунд — содержание Блока №1
-        await asyncio.sleep(15) # 2
+        cursor_data = cursor.get_data()
+        logger.info(f'{cursor_data=}')
+        if cursor_data.get("current_course") != "Другой сотрудник":
+            await callback.message.delete()
+            text = get_course_intro_text()
+            await callback.send(text)
+            # 2) Через 15 секунд — содержание Блока №1
+            await asyncio.sleep(15) # 2
         
         block1_intro = get_block1_intro_text()
+        if cursor_data.get("current_course") == "Другой сотрудник":
+            block1_intro = get_another_emp_intro_text()
+            
         await callback.send(block1_intro)
         
         # 3) Ещё через 10 секунд — сообщение с кнопкой «Продолжить обучение»
@@ -913,19 +962,22 @@ async def training_step_4_handler(callback: Callback, cursor: FSMCursor):
         
         # Отправляем первый вопрос
         cursor.change_data(data)
-        await send_question(callback, cursor, "section_1", "Обучение по продажам")
+        await send_question(callback, cursor, "section_1")
         cursor.change_state(TrainingStates.step_5_testing)
     
     except Exception as e:
         logger.error(f"[training_step_4_handler] Произошла ошибка {e}") 
 
         
-async def send_question(message: Message | Callback, cursor: FSMCursor, lesson_id: str, course_name: str):
+async def send_question(message: Message | Callback, cursor: FSMCursor, lesson_id: str, course_name: str = "Обучение по продажам"):
     """Отправляет текущий вопрос с вариантами ответов"""
     try:
         logger.info("[send_question] Стартовал")
         logger.info(f'[INFO][send_question]state={cursor.get_state()}')
         data:dict = cursor.get_data()
+        course_name = data.get('current_course')
+        if not course_name:
+            course_name = "Обучение по продажам"
         questions = data.get("questions")
         current = data.get("current_question")
         logger.info(f'[send_question] номер текущего вопроса: {current}')
@@ -1032,7 +1084,7 @@ async def show_results(message: Message, cursor: FSMCursor, lesson_id: str, cour
         
         # ✅ Обновляем прогресс пользователя (НОВЫЙ КОД)
         from services.gamification import GamificationService
-        game = GamificationService()
+        game = GamificationService(course_name)
         user_data = load_user_data()
         user_id = str(message.user_id)
         first_name = user_data.get(user_id).get("first_name")
@@ -1152,43 +1204,43 @@ async def process_answer_handler(callback: Callback, cursor: FSMCursor):
         data.update(answers=answers, current_question=current + 1)
         logger.info(f'[INFO][process_answer_handler] state={cursor.get_state()}')
         if cursor.get_state() == 'step_5_testing':
-            await send_question(callback, cursor, 'section_1', 'Обучение по продажам')
+            await send_question(callback, cursor, 'section_1')
         elif cursor.get_state() == 'step_7_testing':
-            await send_question(callback, cursor, 'section_2', 'Обучение по продажам')
+            await send_question(callback, cursor, 'section_2')
         elif cursor.get_state() == 'step_8_testing':
-            await send_question(callback, cursor, 'section_3', 'Обучение по продажам')
+            await send_question(callback, cursor, 'section_3')
         elif cursor.get_state() == 'step_9_testing':
-            await send_question(callback, cursor, 'section_4', 'Обучение по продажам')
+            await send_question(callback, cursor, 'section_4')
         elif cursor.get_state() == 'step_10_testing':
-            await send_question(callback, cursor, 'section_5', 'Обучение по продажам')
+            await send_question(callback, cursor, 'section_5')
         elif cursor.get_state() == 'step_11_testing':
-            await send_question(callback, cursor, 'section_6', 'Обучение по продажам')
+            await send_question(callback, cursor, 'section_6')
         elif cursor.get_state() == 'block_2_test_1_testing':
-            await send_question(callback, cursor, 'section_7', 'Обучение по продажам')
+            await send_question(callback, cursor, 'section_7')
         elif cursor.get_state() == 'block_2_test_2_testing':
-            await send_question(callback, cursor, 'section_8', 'Обучение по продажам')
+            await send_question(callback, cursor, 'section_8')
         elif cursor.get_state() == 'block_2_test_3_testing':
-            await send_question(callback, cursor, 'section_9', 'Обучение по продажам')
+            await send_question(callback, cursor, 'section_9')
         elif cursor.get_state() == 'block_3_test_1_testing':
-            await send_question(callback, cursor, 'section_11', 'Обучение по продажам')
+            await send_question(callback, cursor, 'section_11')
         elif cursor.get_state() == 'block_3_test_2_testing':
-            await send_question(callback, cursor, 'section_12', 'Обучение по продажам')
+            await send_question(callback, cursor, 'section_12')
         elif cursor.get_state() == 'block_3_test_3_testing':
-            await send_question(callback, cursor, 'section_13', 'Обучение по продажам')
+            await send_question(callback, cursor, 'section_13')
         elif cursor.get_state() == 'block_3_test_4_testing':
-            await send_question(callback, cursor, 'section_14', 'Обучение по продажам')
+            await send_question(callback, cursor, 'section_14')
         elif cursor.get_state() == 'block_3_test_5_testing':
-            await send_question(callback, cursor, 'section_15', 'Обучение по продажам')
+            await send_question(callback, cursor, 'section_15')
         elif cursor.get_state() == 'block_3_test_6_testing':
-            await send_question(callback, cursor, 'section_16', 'Обучение по продажам')
+            await send_question(callback, cursor, 'section_16')
         elif cursor.get_state() == 'block_4_test_1_testing':
-            await send_question(callback, cursor, 'section_18', 'Обучение по продажам')
+            await send_question(callback, cursor, 'section_18')
         elif cursor.get_state() == 'block_4_test_2_testing':
-            await send_question(callback, cursor, 'section_19', 'Обучение по продажам')
+            await send_question(callback, cursor, 'section_19')
         elif cursor.get_state() == 'block_4_test_3_testing':
-            await send_question(callback, cursor, 'section_20', 'Обучение по продажам')
+            await send_question(callback, cursor, 'section_20')
         elif cursor.get_state() == 'block_4_test_4_testing':
-            await send_question(callback, cursor, 'section_21', 'Обучение по продажам')
+            await send_question(callback, cursor, 'section_21')
     
     except Exception as e:
         logger.error(f"[ERROR][process_answer_handler] Произошла ошибка {e}")      
@@ -1241,7 +1293,7 @@ async def training_test_2_handler(callback: Callback, cursor: FSMCursor):
         
         # Отправляем первый вопрос
         cursor.change_data(data)
-        await send_question(callback, cursor, 'section_2', 'Обучение по продажам')
+        await send_question(callback, cursor, 'section_2')
         cursor.change_state(TrainingStates.step_7_testing)
     
     except Exception as e:
@@ -1298,7 +1350,7 @@ async def training_test_3_handler(callback: Callback, cursor: FSMCursor):
         
         cursor.change_data(data)
         # Отправляем первый вопрос
-        await send_question(callback, cursor, 'section_3', 'Обучение по продажам')
+        await send_question(callback, cursor, 'section_3')
         cursor.change_state(TrainingStates.step_8_testing)
     
     except Exception as e:
@@ -1352,7 +1404,7 @@ async def training_test_4_handler(callback: Callback, cursor: FSMCursor):
         
         cursor.change_data(data)
         # Отправляем первый вопрос
-        await send_question(callback, cursor, 'section_4', 'Обучение по продажам')
+        await send_question(callback, cursor, 'section_4')
         cursor.change_state(TrainingStates.step_9_testing)
     
     except Exception as e:
@@ -1406,7 +1458,7 @@ async def training_test_5_handler(callback: Callback, cursor: FSMCursor):
         
         cursor.change_data(data)
         # Отправляем первый вопрос
-        await send_question(callback, cursor, 'section_5', 'Обучение по продажам')
+        await send_question(callback, cursor, 'section_5')
         cursor.change_state(TrainingStates.step_10_testing)
     
     except Exception as e:
@@ -1460,7 +1512,7 @@ async def training_test_6_handler(callback: Callback, cursor: FSMCursor):
         
         cursor.change_data(data)
         # Отправляем первый вопрос
-        await send_question(callback, cursor, 'section_6', 'Обучение по продажам')
+        await send_question(callback, cursor, 'section_6')
         cursor.change_state(TrainingStates.step_11_testing)
     
     except Exception as e:
@@ -1477,6 +1529,8 @@ async def continue_after_section6_handler(callback: Callback, cursor: FSMCursor)
         rag = RAGService()
         stats = rag.get_stats()
         
+        cursor_data = cursor.get_data()
+                
         if not stats['is_loaded']:
             await callback.send(
                 "❌ База знаний не загружена. Обратитесь к администратору.",
@@ -1486,6 +1540,8 @@ async def continue_after_section6_handler(callback: Callback, cursor: FSMCursor)
             return
         
         text = get_text_to_final_test_block_1()
+        if cursor_data.get("current_course") == "Другой сотрудник":
+            text = get_text_to_final_test_block_1(True)
         
         await callback.send(text, keyboard=final_start_test_kb())
         cursor.change_state(TrainingStates.block1_questions)
@@ -1500,7 +1556,11 @@ async def start_block1_final_test_handler(callback: Callback, cursor: FSMCursor)
     """Переход к финальному тесту по Блоку №1 - ШАГ 10"""
     try:
         logger.info(f"[INFO][start_block1_final_test_handler] Стартовал")
+        cursor_data = cursor.get_data()
         text = get_text_start_final_test_block_1()
+        
+        if 'current_course' == "Другой сотрудник":
+            text = get_text_start_final_test_block_1(True)
         
         data = cursor.get_data()
         if not data:
@@ -1565,7 +1625,12 @@ async def block1_final_testing_handler(message: Message, cursor: FSMCursor):
         
         #await thinking_msg.delete()
         await asyncio.sleep(2) 
-        await send_question_step_12(message, cursor, 'final_test', 'Обучение по продажам')
+        course_name = get_current_course(cursor)
+        logger.info(f'{course_name=}')
+        if course_name != "Другой сотрудник":
+            await send_question_step_12(message, cursor, 'final_test', 'Обучение по продажам')
+        else:
+            await send_question_step_12(message, cursor, 'final_test', 'Другой сотрудник')
         
         
         
@@ -1639,7 +1704,12 @@ async def start_testing_block1_handler(callback: Callback, cursor: FSMCursor):
         cursor.change_data(data)
         # Отправляем первый закрытый вопрос
         logger.info(f'[start_testing_block1_handler] Отправляем первый закрытый вопрос')
-        await send_question_step_12(callback, cursor, "final_test", "Обучение по продажам")
+        course_name = get_current_course(cursor)
+        logger.info(f'{course_name=}')
+        if course_name != "Другой сотрудник":
+            await send_question_step_12(callback, cursor, "final_test", "Обучение по продажам")
+        else:
+            await send_question_step_12(callback, cursor, 'final_test', 'Другой сотрудник')
         #cursor.change_data(data)  # !!!!!!!!!!
         cursor.change_state(TrainingStates.step_12_testing)
         
@@ -1648,11 +1718,16 @@ async def start_testing_block1_handler(callback: Callback, cursor: FSMCursor):
         logger.error(f"[ERROR][start_testing_block1_handler] Произошла ошибка {e}") 
 
 
-async def send_question_step_12(message: Message | Callback, cursor: FSMCursor, lesson_id: str, course_name: str):
+async def send_question_step_12(message: Message | Callback, cursor: FSMCursor, lesson_id: str, course_name: str = "Обучение по продажам"):
     """Отправка вопроса для step_12 (закрытые или открытые)"""
     try:
         logger.info("[send_question_step12] Стартовал")
         data:dict = cursor.get_data()
+        
+        course_name = get_current_course(cursor)
+        if not course_name:
+            course_name = "Обучение по продажам"
+        
         if not data:
             data = dict()
             stage = data.get("test_stage", "closed")
@@ -1955,7 +2030,7 @@ async def show_results_step12(message: Message, cursor: FSMCursor, lesson_id: st
         total_correct_for_progress = closed_correct_for_progress + open_correct_equivalent
         total_questions_for_progress = len(closed_questions) + len(open_questions)  # 15
         
-        game = GamificationService()
+        game = GamificationService(course_name)
         user_data = load_user_data()
         user_id = str(message.user_id)
         
@@ -1991,7 +2066,10 @@ async def show_results_step12(message: Message, cursor: FSMCursor, lesson_id: st
         
         migration_header = ''
         if migration_state == 'step_12_testing':
+            cursor_data = cursor.get_data()
             migration_header = '№1'
+            if cursor_data.get("current_course") == "Другой сотрудник":
+                migration_header = ''
         elif migration_state == 'block_2_final_testing':
             migration_header = '№2'
         elif migration_state == 'block_3_final_testing':
@@ -2072,7 +2150,14 @@ async def show_results_step12(message: Message, cursor: FSMCursor, lesson_id: st
         
         # Получаем обновлённый прогресс пользователя
         logger.info(f"[INFO][show_results_step12] Получаем обновлённый прогресс пользователя")
-        progress = game.get_user_progress(message.user_id, "Обучение по продажам")
+        
+        progress = ''
+        
+        current_course = get_current_course(cursor)
+        if current_course == 'Другой сотрудник':
+            progress = game.get_user_progress(message.user_id, current_course)
+        else:
+            progress = game.get_user_progress(message.user_id, "Обучение по продажам")
         
         logger.info(f"[INFO][show_results_step12] {progress=}")
         
@@ -2099,21 +2184,24 @@ async def show_results_step12(message: Message, cursor: FSMCursor, lesson_id: st
         first_name = user_data.get(user_id).get("first_name")
         last_name = user_data.get(user_id).get("second_name")
         
+        
+        current_course = get_current_course(cursor)
+        
         if isinstance(progress, list):
             max_progress = get_max_accuracy_item(progress)
             rating_text = (
                 f"🏆 **Ваш рейтинг по итогам Блока {migration_header}**\n\n"
                 f"👤 **Ваше имя:** {first_name} {last_name}\n"
-                f"📚 **Курс:** Обучение по продажам\n\n"
-                f"✅ **Уроков пройдено:** {max_progress['lessons_completed']} / 43\n"   # f"✅ **Уроков пройдено:** {progress['lessons_completed']} / {progress['total_lessons']}\n"
+                f"📚 **Курс:** {'Обучение по продажам' if current_course != 'Другой сотрудник' else current_course}\n\n"
+                f"✅ **Уроков пройдено:** {max_progress['lessons_completed']} / {43 if current_course != 'Другой сотрудник' else 7}\n"   # f"✅ **Уроков пройдено:** {progress['lessons_completed']} / {progress['total_lessons']}\n"
                 f"📈 **Процент правильных ответов:** {max_progress['accuracy_percent']:.1f}%\n"
             )
         else:
             rating_text = (
                 f"🏆 **Ваш рейтинг по итогам Блока {migration_header}**\n\n"
                 f"👤 **Ваше имя:** {first_name} {last_name}\n"
-                f"📚 **Курс:** Обучение по продажам\n\n"
-                f"✅ **Уроков пройдено:** {progress[1]['lessons_completed']} / 43\n"  #  f"✅ **Уроков пройдено:** {progress[1]['lessons_completed']} / {progress[1]['total_lessons']}\n"
+                f"📚 **Курс:** {'Обучение по продажам' if current_course != 'Другой сотрудник' else current_course}\n\n"
+                f"✅ **Уроков пройдено:** {progress[1]['lessons_completed']} / {43 if current_course != 'Другой сотрудник' else 7}\n"  #  f"✅ **Уроков пройдено:** {progress[1]['lessons_completed']} / {progress[1]['total_lessons']}\n"
                 f"📈 **Процент правильных ответов:** {progress[1]['accuracy_percent']:.1f}%\n"
             )
         
@@ -2129,6 +2217,13 @@ async def show_results_step12(message: Message, cursor: FSMCursor, lesson_id: st
         # Пауза перед кнопкой продолжения
         await asyncio.sleep(5) # 2
         
+        logger.info(f'Строка 2198: {migration_header=}')
+        
+        if migration_header == "":
+            block_intro = get_final_another_emp_text()
+            await message.send(block_intro, format="markdown", keyboard=education_kb(final_flag=True))
+            cursor.clear_state()
+            return       
         if migration_header == "№1":
             block_intro = get_block2_intro_text()
             # await message.send(block_intro, format="markdown", keyboard=next_to_educ_to_part_kb())
@@ -2216,7 +2311,7 @@ async def training_block_2_test_1_handler(callback: Callback, cursor: FSMCursor)
         logger.info(f'[training_block_2_test_1_handler] после добавления вопросов в state: {data=}')  
         cursor.change_data(data)
         # Отправляем первый вопрос
-        await send_question(callback, cursor, 'section_7', 'Обучение по продажам')
+        await send_question(callback, cursor, 'section_7')
         cursor.change_state(TrainingStates.block_2_test_1_testing)
     
     except Exception as e:
@@ -2271,7 +2366,7 @@ async def training_block_2_test_2_handler(callback: Callback, cursor: FSMCursor)
         logger.info(f'[training_block_2_test_2_handler] после добавления вопросов в state: {data=}')  
         cursor.change_data(data)
         # Отправляем первый вопрос
-        await send_question(callback, cursor, 'section_8', 'Обучение по продажам')
+        await send_question(callback, cursor, 'section_8')
         cursor.change_state(TrainingStates.block_2_test_2_testing)
     
     except Exception as e:
@@ -2326,7 +2421,7 @@ async def training_block_2_test_3_handler(callback: Callback, cursor: FSMCursor)
         logger.info(f'[training_block_2_test_3_handler] после добавления вопросов в state: {data=}')  
         cursor.change_data(data)
         # Отправляем первый вопрос
-        await send_question(callback, cursor, 'section_8', 'Обучение по продажам')
+        await send_question(callback, cursor, 'section_8')
         cursor.change_state(TrainingStates.block_2_test_3_testing)
     
     except Exception as e:
@@ -2347,8 +2442,10 @@ async def block_2_go_to_final_test_handl(callback: Callback, cursor: FSMCursor):
         intro_text = get_block2_section_4_intro_text()  
         await callback.send(intro_text, disable_link_preview=True)
         
+        current_course = get_current_course(cursor)
+        
         await asyncio.sleep(15) # 2
-        game = GamificationService()
+        game = GamificationService(current_course)
         game.increment_lessons_completed(callback.user_id, increment_lesson=1)
         
         continue_text = "📚 Вы можете продолжить обучение, нажав кнопку ниже 👇"
@@ -2472,7 +2569,7 @@ async def block2_final_testing_handler(message: Message, cursor: FSMCursor):
         #await thinking_msg.delete() 
         
         await asyncio.sleep(2)
-        await send_question_step_12(message, cursor, 'section_10', 'Обучение по продажам')
+        await send_question_step_12(message, cursor, 'section_10')
         
         # Форматируем ответ
         # logger.info(f"[INFO][answer_block2_question_handler] Форматируем ответ") 
@@ -2543,7 +2640,7 @@ async def start_testing_block2_handler(callback: Callback, cursor: FSMCursor):
         cursor.change_data(data)  # !!!!!!!!!!
         # Отправляем первый закрытый вопрос
         logger.info(f'[start_testing_block2_handler] Отправляем первый закрытый вопрос')
-        await send_question_step_12(callback, cursor, "section_10", "Обучение по продажам")
+        await send_question_step_12(callback, cursor, "section_10")
        
         cursor.change_state(TrainingStates.block_2_final_testing)
         
@@ -2588,34 +2685,34 @@ async def final_process_answer_handler(callback: Callback, cursor: FSMCursor):
             cursor.change_data(data)
             logger.info(f'[INFO][final_process_answer_handler] state={cursor.get_state()}')
             if migration_state == 'step_12_testing':
-                await send_question_step_12(callback, cursor, 'final_test', 'Обучение по продажам')
+                await send_question_step_12(callback, cursor, 'final_test')
             elif migration_state == 'block_2_final_testing':
-                await send_question_step_12(callback, cursor, 'section_10', 'Обучение по продажам')
+                await send_question_step_12(callback, cursor, 'section_10')
             elif migration_state == 'block_3_final_testing':
-                await send_question_step_12(callback, cursor, 'section_17', 'Обучение по продажам')
+                await send_question_step_12(callback, cursor, 'section_17')
             elif migration_state == 'block_4_final_testing':
-                await send_question_step_12(callback, cursor, 'section_22', 'Обучение по продажам')
+                await send_question_step_12(callback, cursor, 'section_22')
             elif migration_state == 'block_5_final_testing':
-                await send_question_step_12(callback, cursor, 'section_39', 'Обучение по продажам')
+                await send_question_step_12(callback, cursor, 'section_39')
             elif migration_state == 'block_6_final_testing':
-                await send_question_step_12(callback, cursor, 'section_41', 'Обучение по продажам')
+                await send_question_step_12(callback, cursor, 'section_41')
             elif migration_state == 'block_7_final_testing':
-                await send_question_step_12(callback, cursor, 'section_42', 'Обучение по продажам')
+                await send_question_step_12(callback, cursor, 'section_42')
         elif callback.payload == 'to_final_test':
             if migration_state == 'step_12_testing':
-                await send_question_step_12(callback, cursor, 'final_test', 'Обучение по продажам')
+                await send_question_step_12(callback, cursor, 'final_test')
             elif migration_state == 'block_2_final_testing':
-                await send_question_step_12(callback, cursor, 'section_10', 'Обучение по продажам')
+                await send_question_step_12(callback, cursor, 'section_10')
             elif migration_state == 'block_3_final_testing':
-                await send_question_step_12(callback, cursor, 'section_17', 'Обучение по продажам')
+                await send_question_step_12(callback, cursor, 'section_17')
             elif migration_state == 'block_4_final_testing':
-                await send_question_step_12(callback, cursor, 'section_22', 'Обучение по продажам')
+                await send_question_step_12(callback, cursor, 'section_22')
             elif migration_state == 'block_5_final_testing':
-                await send_question_step_12(callback, cursor, 'section_39', 'Обучение по продажам')
+                await send_question_step_12(callback, cursor, 'section_39')
             elif migration_state == 'block_6_final_testing':
-                await send_question_step_12(callback, cursor, 'section_41', 'Обучение по продажам')
+                await send_question_step_12(callback, cursor, 'section_41')
             elif migration_state == 'block_7_final_testing':
-                await send_question_step_12(callback, cursor, 'section_42', 'Обучение по продажам')
+                await send_question_step_12(callback, cursor, 'section_42')
         
      
     except Exception as e:
@@ -2719,7 +2816,7 @@ async def training_block_3_test_1_handler(callback: Callback, cursor: FSMCursor)
         logger.info(f'[training_block_3_test_1_handler] после добавления вопросов в state: {data=}')  
         cursor.change_data(data)
         # Отправляем первый вопрос
-        await send_question(callback, cursor, 'section_8', 'Обучение по продажам')
+        await send_question(callback, cursor, 'section_8')
         cursor.change_state(TrainingStates.block_3_test_1_testing)
     
     except Exception as e:
@@ -2775,7 +2872,7 @@ async def training_block_3_test_2_handler(callback: Callback, cursor: FSMCursor)
         logger.info(f'[training_block_3_test_2_handler] после добавления вопросов в state: ')  
         cursor.change_data(data)
         # Отправляем первый вопрос
-        await send_question(callback, cursor, 'section_12', 'Обучение по продажам')
+        await send_question(callback, cursor, 'section_12')
         cursor.change_state(TrainingStates.block_3_test_2_testing)
     
     except Exception as e:
@@ -2831,7 +2928,7 @@ async def training_block_3_test_3_handler(callback: Callback, cursor: FSMCursor)
         logger.info(f'[training_block_3_test_3_handler] после добавления вопросов в state: {data=}')  
         cursor.change_data(data)
         # Отправляем первый вопрос
-        await send_question(callback, cursor, 'section_13', 'Обучение по продажам')
+        await send_question(callback, cursor, 'section_13')
         cursor.change_state(TrainingStates.block_3_test_3_testing)
     
     except Exception as e:
@@ -2885,7 +2982,7 @@ async def training_block_3_test_4_handler(callback: Callback, cursor: FSMCursor)
         logger.info(f'[training_block_3_test_4_handler] после добавления вопросов в state: {data=}')  
         cursor.change_data(data)
         # Отправляем первый вопрос
-        await send_question(callback, cursor, 'section_14', 'Обучение по продажам')
+        await send_question(callback, cursor, 'section_14')
         cursor.change_state(TrainingStates.block_3_test_4_testing)
     
     except Exception as e:
@@ -2940,7 +3037,7 @@ async def training_block_3_test_5_handler(callback: Callback, cursor: FSMCursor)
         logger.info(f'[training_block_3_test_5_handler] после добавления вопросов в state: {data=}')  
         cursor.change_data(data)
         # Отправляем первый вопрос
-        await send_question(callback, cursor, 'section_15', 'Обучение по продажам')
+        await send_question(callback, cursor, 'section_15')
         cursor.change_state(TrainingStates.block_3_test_5_testing)
     
     except Exception as e:
@@ -2995,7 +3092,7 @@ async def training_block_3_test_6_handler(callback: Callback, cursor: FSMCursor)
         logger.info(f'[training_block_3_test_6_handler] после добавления вопросов в state: {data=}')  
         cursor.change_data(data)
         # Отправляем первый вопрос
-        await send_question(callback, cursor, 'section_17', 'Обучение по продажам')
+        await send_question(callback, cursor, 'section_17')
         cursor.change_state(TrainingStates.block_3_test_6_testing)
     
     except Exception as e:
@@ -3132,7 +3229,7 @@ async def block3_final_testing_handler(message: Message, cursor: FSMCursor):
         
         #await thinking_msg.delete() 
         await asyncio.sleep(2)
-        await send_question_step_12(message, cursor, 'section_17', 'Обучение по продажам')
+        await send_question_step_12(message, cursor, 'section_17')
         
         # Форматируем ответ
         # logger.info(f"[INFO][answer_block2_question_handler] Форматируем ответ") 
@@ -3213,7 +3310,7 @@ async def start_testing_block3_handler(callback: Callback, cursor: FSMCursor):
         cursor.change_data(data)  # !!!!!!!!!!
         # Отправляем первый закрытый вопрос
         logger.info(f'[start_testing_block3_handler] Отправляем первый закрытый вопрос')
-        await send_question_step_12(callback, cursor, "section_17", "Обучение по продажам")
+        await send_question_step_12(callback, cursor, "section_17")
 
         cursor.change_state(TrainingStates.block_3_final_testing)
         
@@ -3303,7 +3400,7 @@ async def training_block_4_test_1_handler(callback: Callback, cursor: FSMCursor)
         logger.info(f'[training_block_4_test_1_handler] после добавления вопросов в state: {data=}')  
         cursor.change_data(data)
         # Отправляем первый вопрос
-        await send_question(callback, cursor, 'section_18', 'Обучение по продажам')
+        await send_question(callback, cursor, 'section_18')
         cursor.change_state(TrainingStates.block_4_test_1_testing)
     
     
@@ -3359,7 +3456,7 @@ async def training_block_4_test_2_handler(callback: Callback, cursor: FSMCursor)
         logger.info(f'[training_block_4_test_2_handler] после добавления вопросов в state: {data=}')  
         cursor.change_data(data)
         # Отправляем первый вопрос
-        await send_question(callback, cursor, 'section_19', 'Обучение по продажам')
+        await send_question(callback, cursor, 'section_19')
         cursor.change_state(TrainingStates.block_4_test_2_testing)
     
     except Exception as e:
@@ -3413,7 +3510,7 @@ async def training_block_4_test_3_handler(callback: Callback, cursor: FSMCursor)
         logger.info(f'[training_block_4_test_3_handler] после добавления вопросов в state: {data=}')  
         cursor.change_data(data)
         # Отправляем первый вопрос
-        await send_question(callback, cursor, 'section_20', 'Обучение по продажам')
+        await send_question(callback, cursor, 'section_20')
         cursor.change_state(TrainingStates.block_4_test_3_testing)
     
     except Exception as e:
@@ -3469,7 +3566,7 @@ async def training_block_4_test_4_handler(callback: Callback, cursor: FSMCursor)
         logger.info(f'[training_block_4_test_4_handler] после добавления вопросов в state: {data=}')  
         cursor.change_data(data)
         # Отправляем первый вопрос
-        await send_question(callback, cursor, 'section_21', 'Обучение по продажам')
+        await send_question(callback, cursor, 'section_21')
         cursor.change_state(TrainingStates.block_4_test_4_testing)
     
     except Exception as e:
@@ -3603,7 +3700,7 @@ async def block4_final_testing_handler(message: Message, cursor: FSMCursor):
         
         #await thinking_msg.delete() 
         await asyncio.sleep(2)
-        await send_question_step_12(message, cursor, 'section_22', 'Обучение по продажам')
+        await send_question_step_12(message, cursor, 'section_22')
         
     except Exception as e:
         #await thinking_msg.delete()
@@ -3661,7 +3758,7 @@ async def start_testing_block4_handler(callback: Callback, cursor: FSMCursor):
         cursor.change_data(data)  # !!!!!!!!!!
         # Отправляем первый закрытый вопрос
         logger.info(f'[start_testing_block4_handler] Отправляем первый закрытый вопрос')
-        await send_question_step_12(callback, cursor, "section_22", "Обучение по продажам")
+        await send_question_step_12(callback, cursor, "section_22")
 
         cursor.change_state(TrainingStates.block_4_final_testing)
         
@@ -3686,7 +3783,9 @@ async def start_block_5_handler(callback: Callback, cursor: FSMCursor, continue_
             await callback.send(intro_text)
             await asyncio.sleep(15) # 2
         
-        game = GamificationService()
+        current_course = get_current_course(cursor)
+        
+        game = GamificationService(current_course)
         user_id = callback.user_id
                 
         # if await debounce_button_max(callback, cursor):
@@ -3721,7 +3820,10 @@ async def block_5_video_2_handler(callback: Callback, cursor: FSMCursor):
     """БЛОК № 5 - Переход  к просмотру видео № 2"""
     try:
         logger.info(f'[INFO][block_5_video_2_handler] Стартовал')
-        game = GamificationService()
+        
+        current_course = get_current_course(cursor)
+        
+        game = GamificationService(current_course)
         user_id = callback.user_id      
         # if await debounce_button_max(callback, cursor):
         #     return
@@ -3755,7 +3857,10 @@ async def block_5_video_3_handler(callback: Callback, cursor: FSMCursor):
     """БЛОК № 5 - Переход  к просмотру видео № 3"""
     try:
         logger.info(f'[INFO][block_5_video_3_handler] Стартовал')
-        game = GamificationService()
+        
+        current_course = get_current_course(cursor)
+        
+        game = GamificationService(current_course)
         user_id = callback.user_id       
         # if await debounce_button_max(callback, cursor):
         #     return
@@ -3789,7 +3894,10 @@ async def block_5_video_4_handler(callback: Callback, cursor: FSMCursor):
     """БЛОК № 5 - Переход  к просмотру видео № 4"""
     try:
         logger.info(f'[INFO][block_5_video_4_handler] Стартовал')
-        game = GamificationService()
+        
+        current_course = get_current_course(cursor)
+        
+        game = GamificationService(current_course)
         user_id = callback.user_id
                 
         # if await debounce_button_max(callback, cursor):
@@ -3824,7 +3932,10 @@ async def block_5_video_5_handler(callback: Callback, cursor: FSMCursor):
     """БЛОК № 5 - Переход  к просмотру видео № 5"""
     try:
         logger.info(f'[INFO][block_5_video_5_handler] Стартовал')
-        game = GamificationService()
+        
+        current_course = get_current_course(cursor)
+        
+        game = GamificationService(current_course)
         user_id = callback.user_id        
         # if await debounce_button_max(callback, cursor):
         #     return
@@ -3858,7 +3969,10 @@ async def block_5_video_6_handler(callback: Callback, cursor: FSMCursor):
     """БЛОК № 5 - Переход  к просмотру видео № 6"""
     try:
         logger.info(f'[INFO][block_5_video_6_handler] Стартовал')
-        game = GamificationService()
+        
+        current_course = get_current_course(cursor)
+        
+        game = GamificationService(current_course)
         user_id = callback.user_id          
         # if await debounce_button_max(callback, cursor):
         #     return
@@ -3892,7 +4006,10 @@ async def block_5_video_7_handler(callback: Callback, cursor: FSMCursor):
     """БЛОК № 5 - Переход  к просмотру видео № 7"""
     try:
         logger.info(f'[INFO][block_5_video_7_handler] Стартовал')
-        game = GamificationService()
+        
+        current_course = get_current_course(cursor)
+        
+        game = GamificationService(current_course)
         user_id = callback.user_id            
         # if await debounce_button_max(callback, cursor):
         #     return
@@ -3926,7 +4043,8 @@ async def block_5_video_8_handler(callback: Callback, cursor: FSMCursor):
     """БЛОК № 5 - Переход  к просмотру видео № 8"""
     try:
         logger.info(f'[INFO][block_5_video_8_handler] Стартовал')
-        game = GamificationService()
+        current_course = get_current_course(cursor)
+        game = GamificationService(current_course)
         user_id = callback.user_id        
         # if await debounce_button_max(callback, cursor):
         #     return
@@ -3960,7 +4078,8 @@ async def block_5_video_9_handler(callback: Callback, cursor: FSMCursor):
     """БЛОК № 5 - Переход  к просмотру видео № 9"""
     try:
         logger.info(f'[INFO][block_5_video_9_handler] Стартовал')
-        game = GamificationService()
+        current_course = get_current_course(cursor)
+        game = GamificationService(current_course)
         user_id = callback.user_id             
         # if await debounce_button_max(callback, cursor):
         #     return
@@ -3994,7 +4113,8 @@ async def block_5_video_10_handler(callback: Callback, cursor: FSMCursor):
     """БЛОК № 5 - Переход  к просмотру видео № 10"""
     try:
         logger.info(f'[INFO][block_5_video_10_handler] Стартовал')
-        game = GamificationService()
+        current_course = get_current_course(cursor)
+        game = GamificationService(current_course)
         user_id = callback.user_id               
         # if await debounce_button_max(callback, cursor):
         #     return
@@ -4028,7 +4148,8 @@ async def block_5_video_11_handler(callback: Callback, cursor: FSMCursor):
     """БЛОК № 5 - Переход  к просмотру видео № 11"""
     try:
         logger.info(f'[INFO][block_5_video_11_handler] Стартовал')
-        game = GamificationService()
+        current_course = get_current_course(cursor)
+        game = GamificationService(current_course)
         user_id = callback.user_id          
         # if await debounce_button_max(callback, cursor):
         #     return
@@ -4062,7 +4183,8 @@ async def block_5_video_12_handler(callback: Callback, cursor: FSMCursor):
     """БЛОК № 5 - Переход  к просмотру видео № 12"""
     try:
         logger.info(f'[INFO][block_5_video_12_handler] Стартовал')
-        game = GamificationService()
+        current_course = get_current_course(cursor)
+        game = GamificationService(current_course)
         user_id = callback.user_id          
         # if await debounce_button_max(callback, cursor):
         #     return
@@ -4096,7 +4218,8 @@ async def block_5_video_13_handler(callback: Callback, cursor: FSMCursor):
     """БЛОК № 5 - Переход  к просмотру видео № 13"""
     try:
         logger.info(f'[INFO][block_5_video_13_handler] Стартовал')
-        game = GamificationService()
+        current_course = get_current_course(cursor)
+        game = GamificationService(current_course)
         user_id = callback.user_id              
         # if await debounce_button_max(callback, cursor):
         #     return
@@ -4130,7 +4253,8 @@ async def block_5_video_14_handler(callback: Callback, cursor: FSMCursor):
     """БЛОК № 5 - Переход  к просмотру видео № 14"""
     try:
         logger.info(f'[INFO][block_5_video_14_handler] Стартовал')
-        game = GamificationService()
+        current_course = get_current_course(cursor)
+        game = GamificationService(current_course)
         user_id = callback.user_id          
         # if await debounce_button_max(callback, cursor):
         #     return
@@ -4164,7 +4288,8 @@ async def block_5_video_15_handler(callback: Callback, cursor: FSMCursor):
     """БЛОК № 5 - Переход  к просмотру видео № 15"""
     try:
         logger.info(f'[INFO][block_5_video_15_handler] Стартовал')
-        game = GamificationService()
+        current_course = get_current_course(cursor)
+        game = GamificationService(current_course)
         user_id = callback.user_id           
         # if await debounce_button_max(callback, cursor):
         #     return
@@ -4200,9 +4325,15 @@ async def continue_after_block5_handler(callback: Callback, cursor: FSMCursor):
     try:
         logger.info(f"[continue_after_block5_handler] Стартовал")
         logger.info(f"[continue_after_block5_handler] Прибавляем к прогрессу прохождения курса 15 видео-уроков")
-        game = GamificationService()
+        current_course = get_current_course(cursor)
+        game = GamificationService(current_course)
         user_id = callback.user_id
-        lessons_completed = game.get_lessons_completed(user_id)
+        
+        current_course = get_current_course(cursor)
+               
+        lessons_completed = game.get_lessons_completed(user_id) if current_course != "Другой сотрудник" else game.get_lessons_completed(user_id, "Другой сотрудник")
+        
+        #lessons_completed = game.get_lessons_completed(user_id)
         if lessons_completed < 38:
             game.increment_lessons_completed(user_id, increment_lesson=15)    
         
@@ -4303,7 +4434,7 @@ async def block5_final_testing_handler(message: Message, cursor: FSMCursor):
         
         #await thinking_msg.delete() 
         await asyncio.sleep(2)
-        await send_question_step_12(message, cursor, 'section_39', 'Обучение по продажам')
+        await send_question_step_12(message, cursor, 'section_39')
         
         # Форматируем ответ
         # logger.info(f"[INFO][answer_block2_question_handler] Форматируем ответ") 
@@ -4375,7 +4506,7 @@ async def start_testing_block5_handler(callback: Callback, cursor: FSMCursor):
         cursor.change_data(data)  # !!!!!!!!!!
         # Отправляем первый закрытый вопрос
         logger.info(f'[start_testing_block5_handler] Отправляем первый закрытый вопрос')
-        await send_question_step_12(callback, cursor, "section_39", "Обучение по продажам")
+        await send_question_step_12(callback, cursor, "section_39")
 
         cursor.change_state(TrainingStates.block_5_final_testing)
         
@@ -4447,9 +4578,13 @@ async def continue_after_block6_handler(callback: Callback, cursor: FSMCursor):
     """Завершение Блока №6 - Клиент и ЦА. Переход к вопросам или финальному тесту"""
     try:
         logger.info(f"[continue_after_block6_handler] Стартовал")
-        game = GamificationService()
+        current_course = get_current_course(cursor)
+        game = GamificationService(current_course)
         user_id = callback.user_id
-        lessons_completed = game.get_lessons_completed(user_id)
+        
+        current_course = get_current_course(cursor)
+               
+        lessons_completed = game.get_lessons_completed(user_id) if current_course != "Другой сотрудник" else game.get_lessons_completed(user_id, "Другой сотрудник")
         if lessons_completed < 41:
             game.increment_lessons_completed(user_id, increment_lesson=1)
         # Проверяем загрузку базы знаний
@@ -4547,7 +4682,7 @@ async def block6_final_testing_handler(message: Message, cursor: FSMCursor):
         
         #await thinking_msg.delete() 
         await asyncio.sleep(2)
-        await send_question_step_12(message, cursor, 'section_41', 'Обучение по продажам')
+        await send_question_step_12(message, cursor, 'section_41')
         
         # Форматируем ответ
         # logger.info(f"[INFO][answer_block2_question_handler] Форматируем ответ") 
@@ -4618,7 +4753,7 @@ async def start_testing_block6_handler(callback: Callback, cursor: FSMCursor):
         cursor.change_data(data)  # !!!!!!!!!!
         # Отправляем первый закрытый вопрос
         logger.info(f'[start_testing_block6_handler] Отправляем первый закрытый вопрос')
-        await send_question_step_12(callback, cursor, "section_41", "Обучение по продажам")
+        await send_question_step_12(callback, cursor, "section_41")
 
         cursor.change_state(TrainingStates.block_6_final_testing)
         
@@ -4636,9 +4771,15 @@ async def start_block_7_handler(callback: Callback, cursor: FSMCursor, continue_
     """Обработчик завершения обучения по 6 блоку и перехода к блоку № 7 при нажатии на кнопку ПРОДОЛЖИТЬ ОБУЧЕНИЕ"""
     try:
         logger.info(f'[INFO][start_block_7_handler] Стартовал')
-        game = GamificationService()
+        current_course = get_current_course(cursor)
+        game = GamificationService(current_course)
         user_id = callback.user_id
-        lessons_completed = game.get_lessons_completed(user_id)
+        
+        current_course = get_current_course(cursor)
+               
+        lessons_completed = game.get_lessons_completed(user_id) if current_course != "Другой сотрудник" else game.get_lessons_completed(user_id, "Другой сотрудник")
+        
+        #lessons_completed = game.get_lessons_completed(user_id)
         if lessons_completed < 41:
             game.increment_lessons_completed(user_id, increment_lesson=1)
         #cursor.change_state(TrainingStates.block4_start)
@@ -4755,7 +4896,7 @@ async def block7_final_testing_handler(message: Message, cursor: FSMCursor):
         
         #await thinking_msg.delete() 
         await asyncio.sleep(2)
-        await send_question_step_12(message, cursor, 'section_42', 'Обучение по продажам')
+        await send_question_step_12(message, cursor, 'section_42')
         
     except Exception as e:
         #await thinking_msg.delete()
@@ -4816,7 +4957,7 @@ async def start_testing_block7_handler(callback: Callback, cursor: FSMCursor):
         # Отправляем первый закрытый вопрос
         logger.info(f'[start_testing_block7_handler] Отправляем первый закрытый вопрос')
         
-        await send_question_step_12(callback, cursor, "section_42", "Обучение по продажам")
+        await send_question_step_12(callback, cursor, "section_42")
         
         cursor.change_state(TrainingStates.block_7_final_testing)
         
@@ -4827,15 +4968,58 @@ async def start_testing_block7_handler(callback: Callback, cursor: FSMCursor):
         
 #################################################        
    
+
+@router.on_button_callback(state(AnotherEmployerStates.user_type), lambda data: data.payload == 'another_emp')
+async def another_employer_training_handler(callback: Callback, cursor: FSMCursor):
+    """Обработчик нажатия на кнопку 📚 Обучение по продукту"""
+    try:
+        state_name = cursor.get_state()
+        logger.info(f'{state_name=}')
+        await callback.message.delete()
+        #await callback.send(text)
+        
+        logger.info("Cтартовал обработчик нажатия кнопки 📚 Обучение по продукту")
+        logger.info(f"[another_employer_training_handler] Определяем прогресс пользователя в обучении")
+        
+        current_course = get_current_course(cursor)
+        game = GamificationService(current_course)
+        user_id = callback.user_id
+        
+        current_course = get_current_course(cursor)
+               
+        lessons_completed = game.get_lessons_completed(user_id) if current_course != "Другой сотрудник" else game.get_lessons_completed(user_id, "Другой сотрудник")
+        #lessons_completed = game.get_lessons_completed(user_id)
+        #lessons_completed = None
+        
+        if not lessons_completed:
+            await flow_another_emp_training_intro(
+                lambda text, with_keyboard=None: send(callback, text, with_keyboard)
+                )
+            return
+                
+        return
+    except Exception as e:
+        logger.error(f'Произошла ошибка {e}')    
+        
+
+
 @router.on_button_callback(lambda data: data.payload == 'education')
 async def flow_sales_training_handler(callback: Callback, cursor: FSMCursor):
     """Обработчик нажатия на кнопку 📚 Обучение по продажам"""
     try:
+        state_name = cursor.get_state()
+        logger.info(f'{state_name=}')
         logger.info("Cтартовал обработчик нажатия кнопки 📚 Обучение по продажам")
-        logger.info(f"[next_education_handler] Определяем прогресс пользователя в обучении")
-        game = GamificationService()
+        logger.info(f"[flow_sales_training_handler] Определяем прогресс пользователя в обучении")
+        current_course = get_current_course(cursor)
+        game = GamificationService(current_course)
         user_id = callback.user_id
-        lessons_completed = game.get_lessons_completed(user_id)
+        
+        current_course = get_current_course(cursor)
+               
+        lessons_completed = game.get_lessons_completed(user_id) if current_course != "Другой сотрудник" else game.get_lessons_completed(user_id, "Другой сотрудник")
+        
+        #lessons_completed = game.get_lessons_completed(user_id)
         
         full_block = 1
                 
@@ -4975,7 +5159,8 @@ async def high_result_handler(callback: Callback, cursor: FSMCursor):
     """Обработчик нажатия на кнопку "⬆️ Улучшить результат"""
     try:
         logger.info(f"[high_result_handler] Стартовал")
-        game = GamificationService()
+        current_course = get_current_course(cursor)
+        game = GamificationService(current_course)
         game.reset_user_course_progress(callback.user_id)
         await training_step_3_handler(callback, cursor, True)
     except Exception as e:

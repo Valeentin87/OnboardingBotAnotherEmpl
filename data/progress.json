@@ -34,52 +34,54 @@
       "username": "Тестовый Пользователь",
       "first_name": "Тестовый",
       "last_name": "Пользователь",
-      "last_activity": "2026-04-15T13:26:21.770663"
+      "last_activity": "2026-06-04T16:13:04.404254"
     },
     "courses": {
       "Обучение по продажам": {
         "lessons_completed": 7,
         "total_lessons": 43,
-        "correct_answers": 12,
+        "correct_answers": 7,
         "total_answers": 45,
-        "accuracy_percent": 26.7
+        "accuracy_percent": 15.6
       }
     },
     "lesson_results": {
-      "section_1": {
-        "correct_count": 3,
-        "total_count": 5,
-        "accuracy": 60.0
-      },
-      "section_2": {
-        "correct_count": 1,
-        "total_count": 5,
-        "accuracy": 20.0
-      },
-      "section_3": {
-        "correct_count": 1,
-        "total_count": 5,
-        "accuracy": 20.0
-      },
-      "section_4": {
-        "correct_count": 0,
-        "total_count": 5,
-        "accuracy": 0.0
-      },
-      "section_5": {
-        "correct_count": 1,
-        "total_count": 5,
-        "accuracy": 20.0
-      },
-      "section_6": {
-        "correct_count": 2,
-        "total_count": 5,
-        "accuracy": 40.0
-      },
-      "final_test": {
-        "correct_count": 4,
-        "total_count": 15,
-        "accuracy": 26.7
+      "Обучение по продажам": {
+        "section_1": {
+          "correct_count": 0,
+          "total_count": 5,
+          "accuracy": 0.0
+        },
+        "section_2": {
+          "correct_count": 0,
+          "total_count": 5,
+          "accuracy": 0.0
+        },
+        "section_3": {
+          "correct_count": 3,
+          "total_count": 5,
+          "accuracy": 60.0
+        },
+        "section_4": {
+          "correct_count": 1,
+          "total_count": 5,
+          "accuracy": 20.0
+        },
+        "section_5": {
+          "correct_count": 0,
+          "total_count": 5,
+          "accuracy": 0.0
+        },
+        "section_6": {
+          "correct_count": 1,
+          "total_count": 5,
+          "accuracy": 20.0
+        },
+        "final_test": {
+          "correct_count": 2,
+          "total_count": 15,
+          "accuracy": 13.3
+        }
       }
     }
   },

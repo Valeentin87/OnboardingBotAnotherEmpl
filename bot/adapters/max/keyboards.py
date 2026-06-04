@@ -29,7 +29,7 @@ def change_course_kb():
     return kb.to_list()
 
 
-def main_menu_keyboard():
+def main_menu_keyboard(educ_button_name:str = "Обучение по продажам"):
     """
     Главное меню для MAX:
     - О компании
@@ -39,7 +39,7 @@ def main_menu_keyboard():
     """
     kb = KeyboardBuilder()
     kb.row(CallbackButton(text="🏢 О компании", payload="about_company"))
-    kb.row(CallbackButton(text="📚 Обучение по продажам", payload="education"))
+    kb.row(CallbackButton(text=f"📚 {educ_button_name}", payload="education"))
     kb.row(
         CallbackButton(text="📊 Мой прогресс", payload="my_progress"),
         CallbackButton(text="🏆 Рейтинг", payload="raiting"),
@@ -87,10 +87,10 @@ def change_course_to_export_stat_kb(courses_name: list[str]):
     return export_stat_kb.to_list()
 
 
-def education_kb(final_flag:bool = False, with_out_ai_flag:bool = False):
+def education_kb(final_flag:bool = False, with_out_ai_flag:bool = False, current_cource: str = "Обучение по продажам"):
     educ_kb = KeyboardBuilder()
     if not final_flag:
-        educ_kb.row(CallbackButton(text="💼 Обучение по продажам", payload="education"))
+        educ_kb.row(CallbackButton(text=f"💼 {current_cource}", payload="education" if current_cource != "Обучение по продукту" else "another_emp"))
     if not with_out_ai_flag:
         educ_kb.row(CallbackButton(text="🏠 Главное меню", payload="main_menu"))
     else:

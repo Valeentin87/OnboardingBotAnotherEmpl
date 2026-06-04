@@ -2,6 +2,13 @@ class UserInfo:
     """Состояния конечных автоматов информации о пользователе"""
     waiting_for_name_surname =  'waiting_for_name_surname'
 
+
+
+class AnotherEmployerStates:
+    """Состояния для ветки ДРУГОЙ СОТРУДНИК"""
+    user_type = "another_employer"
+
+
 class OnboardingStates:
     """Состояния конечных атвоматов для подготовки к обучению"""
     waiting_for_start_date = 'waiting_for_start_date'
