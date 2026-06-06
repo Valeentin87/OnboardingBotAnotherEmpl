@@ -540,7 +540,7 @@ class GamificationService:
             'total_answers': total_answers,
             'accuracy_percent': accuracy_percent,
             'lessons_completed': 43,
-            'course_name': 'Обучение по продажам'            
+            'course_name': course_name            
         }
 
         # Добавляем новую попытку в историю (дописываем, не заменяем)
@@ -637,6 +637,30 @@ class GamificationService:
                 all_courses_name.append(course_name)
         
         return list(set(all_courses_name))
+    
+    
+    def get_full_completed_lessons(self, course_name: str, user_id: int):
+        """Возвращает количество полных уроков, завершенных пользователем
+        по курсу обучения, переданному в аргументе"""
+        
+        data = self._load_data()
+        
+        user_data = data.get(str(user_id))
+        if user_data:
+            courses_data = user_data.get("courses")
+            if courses_data:
+                current_course_data = courses_data.get(course_name)
+        
+        lessons_completed = current_course_data.get("lessons_completed") if current_course_data else 0
+        total_lessons = current_course_data.get("lessons_completed") if current_course_data else 0
+        
+        full_completed_lessons = lessons_completed if total_lessons else None
+        logger.info(f'{data=}\n{current_course_data=}\n{full_completed_lessons=}')
+        
+        return full_completed_lessons
+        
+        
+        
                 
     
     
@@ -659,6 +683,7 @@ class GamificationService:
         # Загружаем все данные
         data = self._load_data()
         user_key = str(user_id)
+        total_lessons = 43 if course_name == "Обучение по продажам" else 7
 
         # Проверяем, существует ли пользователь в данных
         if user_key not in data:
@@ -671,7 +696,7 @@ class GamificationService:
             logger.warning(f'[WARNING][GamificationService][reset_user_course_progress] '
                     f'Курс {course_name} не найден для пользователя {user_id}')
             # Инициализируем курс с дефолтными значениями, если его нет
-            total_lessons = 43 if course_name == "Обучение по продажам" else 7
+            
             if 'courses' not in data[user_key]:
                 data[user_key]['courses'] = {}
             data[user_key]['courses'][course_name] = {
@@ -701,5 +726,13 @@ class GamificationService:
 
         # Возвращаем обновлённый прогресс
         return data[user_key]['courses'][course_name]
+
+    
+if __name__ == '__main__':
+    game = GamificationService()
+    
+    game.get_full_completed_lessons(course_name="Другой сотрудник", user_id=1234)
+    
+    
 
 

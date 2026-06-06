@@ -19,18 +19,24 @@ from core.content import (
     get_block1_section1_questions,
     format_block1_section1_question,
     format_block1_section1_result,
+    get_start_text_another_employer,
 )
 
 #logging.basicConfig(level=logging.INFO)
 
 
-async def flow_start(send):
+async def flow_start(send, course_name:str):
     """
     Стартовый сценарий:
-    отправить приветственное сообщение.
+    отправить приветственное сообщение в зависимости от названия курса обучения,
+    переданного в аргументе.
     """
     #state_name = cursor.get_state()
-    text = get_start_text()
+    if course_name == "Обучение по продажам":
+        text = get_start_text()
+    
+    elif course_name == "Другой сотрудник":
+        text = get_start_text_another_employer()
     
     #if state_name == "another_employer":
     await send(text=text)

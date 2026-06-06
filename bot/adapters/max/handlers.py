@@ -49,7 +49,10 @@ router = Router()
 def get_current_course(cursor: FSMCursor):
     """Возвращает название курса обучения"""
     cursor_data = cursor.get_data()
-    return cursor_data.get("current_course")
+    if cursor_data:
+        return cursor_data.get("current_course")
+    else:
+        return "Обучение по продажам"
 
 @router.on_button_callback(lambda data: data.payload == "sales_manager")
 async def sales_manager_start_handl(ctx: Callback, cursor: FSMCursor):
@@ -85,7 +88,7 @@ async def change_course_name_handl(ctx: Callback, cursor: FSMCursor):
     cursor.clear_state()
     text = get_change_course_text()
     
-    await ctx.send(text=text, keyboard=change_course_kb())
+    await ctx.send(text=text, keyboard=change_course_kb(), format='markdown')
 
 
 @router.on_bot_start()
@@ -129,12 +132,14 @@ async def start_command(ctx: CommandContext, cursor: FSMCursor, user_type:str = 
         logger.info(f'{data=}')
         if data:
             if "current_course" in data and data.get("current_course") == "Обучение по продажам":
-                await flow_start(send)
+                course_name = data.get("current_course")
+                await flow_start(send, course_name)
                 return
             
             if "current_course" in data and data.get("current_course") == "Другой сотрудник":
                 cursor.change_state(AnotherEmployerStates.user_type)
-                await flow_start(send)
+                course_name = data.get("current_course")
+                await flow_start(send, course_name)
                 return
         
         await flow_start_change_kb(change_course_send)
@@ -1556,10 +1561,10 @@ async def start_block1_final_test_handler(callback: Callback, cursor: FSMCursor)
     """Переход к финальному тесту по Блоку №1 - ШАГ 10"""
     try:
         logger.info(f"[INFO][start_block1_final_test_handler] Стартовал")
-        cursor_data = cursor.get_data()
+        current_course = get_current_course(cursor)
         text = get_text_start_final_test_block_1()
         
-        if 'current_course' == "Другой сотрудник":
+        if current_course == "Другой сотрудник":
             text = get_text_start_final_test_block_1(True)
         
         data = cursor.get_data()
@@ -2058,6 +2063,14 @@ async def show_results_step12(message: Message, cursor: FSMCursor, lesson_id: st
             correct_answers = course_progress.get('correct_answers')
             total_answers = course_progress.get('total_answers')       
             game.record_course_completion_attempt(int(user_id), correct_answers=correct_answers, total_answers=total_answers)
+        
+        if cursor.get_state() == 'step_12_testing':
+            data = game._load_data()
+            course_progress = data[user_id]['courses'][course_name]
+            correct_answers = course_progress.get('correct_answers')
+            total_answers = course_progress.get('total_answers')       
+            game.record_course_completion_attempt(int(user_id), correct_answers=correct_answers, total_answers=total_answers, course_name="Другой сотрудник")
+            
         
         # ==========================================
         # ИТОГОВЫЙ ОТЧЁТ
@@ -5012,14 +5025,17 @@ async def flow_sales_training_handler(callback: Callback, cursor: FSMCursor):
         logger.info("Cтартовал обработчик нажатия кнопки 📚 Обучение по продажам")
         logger.info(f"[flow_sales_training_handler] Определяем прогресс пользователя в обучении")
         current_course = get_current_course(cursor)
+        logger.info(f'{current_course=}')
         game = GamificationService(current_course)
         user_id = callback.user_id
-        
-        current_course = get_current_course(cursor)
-               
+                       
         lessons_completed = game.get_lessons_completed(user_id) if current_course != "Другой сотрудник" else game.get_lessons_completed(user_id, "Другой сотрудник")
         
         #lessons_completed = game.get_lessons_completed(user_id)
+        
+        logger.info(f'{lessons_completed=}')
+        
+        full_completed_lessons = game.get_full_completed_lessons(course_name = current_course, user_id = user_id)
         
         full_block = 1
                 
@@ -5028,6 +5044,13 @@ async def flow_sales_training_handler(callback: Callback, cursor: FSMCursor):
                 lambda text, with_keyboard=None: send(callback, text, with_keyboard)
                 )
             return
+        
+        elif lessons_completed < 7 and current_course == 'Другой сотрудник':
+            logger.info(f"[next_education_handler] Обучение по курсу ДРУГОЙ СОТРУДНИК не завершено")
+            data = game._load_data()
+            logger.info(f'{data=}')
+            
+        
         elif lessons_completed < 7:
             logger.info(f"[next_education_handler] Обучение по блоку № 1 не завершено")
             full_block = 1
@@ -5061,11 +5084,14 @@ async def flow_sales_training_handler(callback: Callback, cursor: FSMCursor):
         text = (
             f"Вы уже приступили к обучению и в настоящий момент полностью прошли **{full_block - 1} из 7** блоков обучения\n"
             " Вы можете 📚 **Продолжить обучение** \n либо попытаться ⬆️ **Улучшить результат**, нажав на соответствующие  кнопки ниже 👇"
+        ) if current_course == 'Обучение по продажам' else (
+            f"Вы уже приступили к обучению и в настоящий момент полностью прошли **{full_completed_lessons} из 7** этапов обучения\n"
+            " Вы можете 📚 **Продолжить обучение** \n либо попытаться ⬆️ **Улучшить результат**, нажав на соответствующие  кнопки ниже 👇"
         )
         
         
         
-        if lessons_completed == 43:
+        if lessons_completed == 43 and current_course == 'Обучение по продажам':
             logger.info(f"[next_education_handler] Обучение ранее было завершено")
             full_block = 8
             text = (
@@ -5077,8 +5103,23 @@ async def flow_sales_training_handler(callback: Callback, cursor: FSMCursor):
             await callback.send(text, keyboard=finish_studying_kb())
             return
         
+        elif lessons_completed == 7 and current_course == 'Другой сотрудник':
+            logger.info(f"[next_education_handler] Обучение по курсу ДРУГОЙ СОТРУДНИК ранее было завершено")
+            full_block = 7
+            text = (
+            f"Вы ранее уже полностью прошли курс обучения **ДРУГОЙ СОТРУДНИК**\n"
+            " Вы можете попытаться ⬆️ **Улучшить результат**, нажав на соответствующую  кнопку ниже 👇\n"
+            "либо вернуться в 🏠 **Главное меню**"
+            )
+            await callback.message.delete()
+            await callback.send(text, keyboard=finish_studying_kb())
+            return
+        
         await callback.message.delete()
-        await callback.send(text, keyboard=continue_studying_kb(full_block))
+        if current_course == "Обучение по продажам":
+            await callback.send(text, keyboard=continue_studying_kb(full_block))
+        elif current_course == "Другой сотрудник":
+            await callback.send(text, keyboard=continue_studying_kb(full_completed_lessons))
         
         return
     except Exception as e:
@@ -5126,29 +5167,52 @@ async def continue_studying_handler(callback: Callback, cursor: FSMCursor):
     продолжить с блока, следующего за полностью завершенным"""
     try:
         logger.info(f"[continue_studying_handler] Стартовал")
+        current_course = get_current_course(cursor)
+        logger.info(f'{current_course=}')
         full_block_id = callback.payload.split("::")[1]
         logger.info(f"[continue_studying_handler] {full_block_id=}")
-        if full_block_id == '1':
-            cursor.change_state(TrainingStates.step_2_video)
-            await training_step_3_handler(callback, cursor)
-        elif full_block_id == '2':
-            cursor.change_state(TrainingStates.step_12_testing)
-            await start_block_2_handler(callback, cursor, True)
-        elif full_block_id == '3':
-            cursor.change_state(TrainingStates.block_2_final_testing)
-            await start_block_3_handler(callback, cursor, True)
-        elif full_block_id == '4':
-            cursor.change_state(TrainingStates.block_3_final_testing)
-            await start_block_4_handler(callback, cursor, True)
-        elif full_block_id == '5':
-            cursor.change_state(TrainingStates.block_4_final_testing)
-            await start_block_5_handler(callback, cursor, True)
-        elif full_block_id == '6':
-            cursor.change_state(TrainingStates.block_5_final_testing)
-            await start_block_6_section_1_handler(callback, cursor, True)
-        elif full_block_id == '7':
-            cursor.change_state(TrainingStates.block_6_final_testing)
-            await start_block_7_handler(callback, cursor, True)
+        if current_course == "Обучение по продажам":
+            if full_block_id == '1':
+                cursor.change_state(TrainingStates.step_2_video)
+                await training_step_3_handler(callback, cursor)
+            elif full_block_id == '2':
+                cursor.change_state(TrainingStates.step_12_testing)
+                await start_block_2_handler(callback, cursor, True)
+            elif full_block_id == '3':
+                cursor.change_state(TrainingStates.block_2_final_testing)
+                await start_block_3_handler(callback, cursor, True)
+            elif full_block_id == '4':
+                cursor.change_state(TrainingStates.block_3_final_testing)
+                await start_block_4_handler(callback, cursor, True)
+            elif full_block_id == '5':
+                cursor.change_state(TrainingStates.block_4_final_testing)
+                await start_block_5_handler(callback, cursor, True)
+            elif full_block_id == '6':
+                cursor.change_state(TrainingStates.block_5_final_testing)
+                await start_block_6_section_1_handler(callback, cursor, True)
+            elif full_block_id == '7':
+                cursor.change_state(TrainingStates.block_6_final_testing)
+                await start_block_7_handler(callback, cursor, True)
+        elif current_course == "Другой сотрудник":
+            if full_block_id == '1':
+                cursor.change_state(TrainingStates.step_6_next)
+                await training_step_6_handler(callback, cursor)
+            elif full_block_id == '2':
+                cursor.change_state(TrainingStates.step_8_next)
+                await training_step_8_handler(callback, cursor)
+            elif full_block_id == '3':
+                cursor.change_state(TrainingStates.step_9_next)
+                await training_step_9_handler(callback, cursor)
+            elif full_block_id == '4':
+                cursor.change_state(TrainingStates.step_10_next)
+                await training_step_10_handler(callback, cursor)
+            elif full_block_id == '5':
+                cursor.change_state(TrainingStates.step_11_next)
+                await training_step_11_handler(callback, cursor)
+            elif full_block_id == '6':
+                cursor.change_state(TrainingStates.step_11_next)
+                await continue_after_section6_handler(callback, cursor)
+                
             
     except Exception as e:
         logger.error(f"[continue_studying_handler] Произошла ошибка {e}")  
@@ -5160,8 +5224,13 @@ async def high_result_handler(callback: Callback, cursor: FSMCursor):
     try:
         logger.info(f"[high_result_handler] Стартовал")
         current_course = get_current_course(cursor)
+        logger.info(f'{current_course=}')
         game = GamificationService(current_course)
-        game.reset_user_course_progress(callback.user_id)
-        await training_step_3_handler(callback, cursor, True)
+        game.reset_user_course_progress(callback.user_id, current_course)
+        if current_course == 'Обучение по продажам':
+            await training_step_3_handler(callback, cursor, True)
+        elif current_course == 'Другой сотрудник':
+            await training_step_3_handler(callback, cursor, True)
+            
     except Exception as e:
         logger.error(f"[high_result_handler] Произошла ошибка {e}")  
