@@ -109,13 +109,20 @@ def format_progress_attempts(attempts: list) -> str:
         date_obj = datetime.fromisoformat(attempt['date_completed'])
         formatted_date =  date_obj.strftime('%d.%m.%Y')  # date_obj.strftime('%d.%m.%Y в %H:%M')
 
-
-        # Формируем блок для одной попытки
-        block_lines = [
-            f"🗓️ Дата прохождения: {formatted_date}",
-            f"✅ Уроков пройдено: {attempt['lessons_completed']} / 43",
-            f"📈 Процент правильных ответов: {attempt['accuracy_percent']}%"
-        ]
+        if attempt["course_name"] == "Обучение по продажам":
+            # Формируем блок для одной попытки
+            block_lines = [
+                f"🗓️ Дата прохождения: {formatted_date}",
+                f"✅ Уроков пройдено: {attempt['lessons_completed']} / 43",
+                f"📈 Процент правильных ответов: {attempt['accuracy_percent']}%"
+            ]
+        elif attempt["course_name"] == "Другой сотрудник":
+            block_lines = [
+                f"🗓️ Дата прохождения: {formatted_date}",
+                f"✅ Уроков пройдено: 7 / 7",
+                f"📈 Процент правильных ответов: {attempt['accuracy_percent']}%"
+            ]
+            
 
         block = "\n".join(block_lines)
 
@@ -128,7 +135,7 @@ def format_progress_attempts(attempts: list) -> str:
     
     
     # Объединяем все блоки с двумя переносами строк между ними
-    return "<b>Вот результаты Ваших прохождений обучения по курсу:</b>\n" + "\n\n".join(formatted_blocks)
+    return f"<b>Вот результаты Ваших прохождений обучения по курсу «{attempts[0]['course_name']}»:</b>\n" + "\n\n".join(formatted_blocks)
 
 
 def get_max_accuracy_item(data):

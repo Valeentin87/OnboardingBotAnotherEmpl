@@ -70,15 +70,19 @@ class GamificationService:
 
         # Проверяем наличие completed_attempts
         completed_attempts = user_data.get('completed_attempts', [])
+        
+        # Фильтруем все попытки прохождения по требуемому названию курса
+        completed_attempts_by_course = list(filter(lambda c: c.get("course_name") == course_name, completed_attempts)) if completed_attempts else [] 
 
-        if completed_attempts:
+        if completed_attempts_by_course:
             # Сортируем попытки по дате в порядке возрастания
             sorted_attempts = sorted(
-                completed_attempts,
+                completed_attempts_by_course,
                 key=lambda attempt: attempt['date_completed']
             )
             logger.info(f'[INFO][GamificationService][get_user_progress] '
                     f'Для пользователя {user_id} найдены {len(sorted_attempts)} попыток, возвращаем отсортированный список')
+            
             return sorted_attempts
 
         else:
@@ -94,6 +98,8 @@ class GamificationService:
                         f'Для пользователя {user_id} не найдены данные курса {course_name}, используем дефолтные значения')
                 
                 total_lessons = self.total_lessons_info[self.current_course]
+                
+                logger.info(f'{total_lessons=}')
                 
                 course_data = {
                     'lessons_completed': 0,
@@ -277,14 +283,17 @@ class GamificationService:
             logger.info(f'[INFO][GamificationService][get_all_users_progress] '
                 f'Проверяем наличие и непустоту completed_attempts')
             completed_attempts = user_data.get('completed_attempts', [])
+            
+            completed_attempts_by_course = list(filter(lambda c: c.get("course_name") == course_name, completed_attempts)) if completed_attempts else [] 
+            
             best_progress = None
 
-            if completed_attempts:  # Если список не пустой
+            if completed_attempts_by_course:  # Если список не пустой
                 logger.info(f'[INFO][GamificationService][get_all_users_progress] '
                 f'Находим попытку с максимальным accuracy_percent')
                 # Находим попытку с максимальным accuracy_percent
                 best_attempt = max(
-                    completed_attempts,
+                    completed_attempts_by_course,
                     key=lambda attempt: attempt['accuracy_percent']
                 )
                 best_progress = {
@@ -601,7 +610,7 @@ class GamificationService:
         return lessons_completed
     
     
-    def get_info_to_exel_for_user(self, user_id:int, education_info:dict, course_name: str = "Обучение по продажам"):
+    def get_info_to_exel_for_user(self, user_id:int, education_info:dict, course_name: str = "Обучение по продажам", all_courses_flag: bool = True):
         result_info = {}
         completed_attempts = []
         not_completed_courses = []
@@ -612,8 +621,10 @@ class GamificationService:
             for attemp in education_info.get('completed_attempts'):
                 logger.info(f'{attemp=}')
                 logger.info(f'Название курса: {course_name=}')
-                if attemp.get('course_name') == course_name:
+                if not all_courses_flag and attemp.get('course_name') == course_name:
                     logger.info(f'Для пользователя {user_id} обнаружили завершенную попытку пройти курс {course_name}')
+                    completed_attempts.append({course_name: attemp})
+                else:
                     completed_attempts.append({course_name: attemp})
         
         if 'courses' in education_info:

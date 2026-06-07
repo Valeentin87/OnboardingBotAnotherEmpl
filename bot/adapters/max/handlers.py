@@ -229,14 +229,13 @@ async def raiting_command(ctx: CommandContext | Callback, cursor: FSMCursor):
     try:
         logger.info(f'[INFO][raiting_command] Стартовал')
         cursor.clear_state()
+        current_course = get_current_course(cursor)
         
         if isinstance(ctx, Callback):
             await ctx.message.delete()
         
-        game = GamificationService()
-        
-        current_course = get_current_course(cursor)
-        
+        game = GamificationService(current_course)
+              
         course_name = "Обучение по продажам" if current_course != "Другой сотрудник" else "Другой сотрудник"
         logger.info(f'{course_name=}')
         
@@ -328,6 +327,25 @@ async def raiting_command(ctx: CommandContext | Callback, cursor: FSMCursor):
 FILE_PATH = 'data/statistics.xlsx'
 
 
+def add_timestamp_to_filename(filename: str = FILE_PATH):
+    # Получаем текущую дату и время
+    now = datetime.now()
+    
+    # Форматируем дату и время в нужный вид: ДД_ММ_ГГГГ_time_ЧЧ_ММ
+    timestamp = now.strftime("%d_%m_%Y_time_%H_%M")
+    
+    # Разделяем имя файла и расширение
+    if '.' in filename:
+        name, extension = filename.rsplit('.', 1)
+        new_filename = f"{name}_{timestamp}.{extension}"
+    else:
+        # Если расширения нет
+        new_filename = f"{filename}_{timestamp}"
+    
+    return new_filename
+
+
+
 @router.on_button_callback(lambda data: data.payload == 'all_courses')
 async def all_courses_stat_info_handler(ctx: CommandContext, cursor: FSMCursor):
     """Обработчик нажатия на кнопку ПО ВСЕМ КУРСАМ"""
@@ -354,18 +372,22 @@ async def all_courses_stat_info_handler(ctx: CommandContext, cursor: FSMCursor):
         data_to_exel[(user_id, last_first_user_name)] = current_user_result
     
     excel_gen = ExcelStatisticGenerator(data_to_exel)
-    excel_gen.generate_excel("data/statistics.xlsx")
     
-    if not os.path.exists(FILE_PATH):
-        await ctx.send("❌ Файл statistics.xlsx не найден в папке data.")
+    file_path = add_timestamp_to_filename()
+    
+    #excel_gen.generate_excel("data/statistics.xlsx")
+    excel_gen.generate_excel(file_path)
+    
+    if not os.path.exists(file_path):
+        await ctx.send(f"❌ Файл {file_path} не найден в папке data.")
         return
     
     try:
         # Открываем файл в бинарном режиме
-        with open(FILE_PATH, 'rb') as file:
+        with open(file_path, 'rb') as file:
             # Отправляем документ в чат
             attachment = await ctx.bot.upload_file(
-                'data/statistics.xlsx'
+                file_path
             )
             await ctx.send('Статистика прохождения обучения', attachments=attachment)
         await ctx.send("Для продолжения нажмите ниже", keyboard=main_one_kb())
@@ -375,8 +397,31 @@ async def all_courses_stat_info_handler(ctx: CommandContext, cursor: FSMCursor):
     
     
     #pprint(data_to_exel)
-        
 
+@router.on_button_callback(lambda data: data.payload.startswith('export_data'))
+async def current_course_stat_info_handler(callback: Callback, cursor: FSMCursor):
+    course = callback.payload.split('::')[1]
+    logger.info(f'{course=}')
+    
+    course_name = COURSES_NAMES.get(course)
+    logger.info(f'{course_name=}')
+    
+    logger.info(f'Приступаем к формированию статистики прохождения обучения по курсу: {course_name}')
+    
+    game = GamificationService()
+    
+    data = game._load_data()
+    data_to_exel = {}
+    logger.info(f'Убираем лишнюю информацию из data - ключи lesson_results и значения по ним')
+    
+    users_data = {}
+    for user, user_data in data.copy().items():
+        #del user_data['lesson_results']
+        users_data.setdefault(user, user_data)
+    pprint(users_data)
+    
+        
+        
 
 @router.on_button_callback(lambda data: data.payload == 'my_progress')
 @router.on_command("my_progress")
@@ -384,16 +429,19 @@ async def my_progress_handler(ctx: CommandContext | Callback, cursor: FSMCursor)
     """Реализация логики прогресса ученика"""
     try:
         logger.info(f'[INFO][my_progress_handler] Стартовал')
+        current_course = get_current_course(cursor)
+              
         if isinstance(ctx, Callback):
             await ctx.message.delete()
         
-        game = GamificationService()
+        game = GamificationService(current_course)
             
         course_name = "Обучение по продажам"
-        current_course = get_current_course(cursor)
+        
         if current_course == 'Другой сотрудник':
             course_name = current_course
         progress = game.get_user_progress(ctx.user_id, course_name)
+        logger.info(f'{course_name=}\n{progress=}')
         
         logger.info(
             'Реализуем логику отображения прогресса в зависимости от того, кто его запрашивает'
@@ -562,8 +610,9 @@ async def export_stats(message: Message):
         logger.info(f'{all_courses_name=}')
                
         await message.send(
-            text='Выберите название курса, по которому хотите получить статистику, либо Нажмите ПО ВСЕМ КУРСАМ для выгрузки всей статистики',
-            keyboard=change_course_to_export_stat_kb(all_courses_name)
+            text='Выберите название курса, по которому хотите получить статистику, либо нажмите <b>ПО ВСЕМ КУРСАМ</b> для выгрузки всей статистики:',
+            keyboard=change_course_to_export_stat_kb(all_courses_name),
+            format='html'
         )
         
         return

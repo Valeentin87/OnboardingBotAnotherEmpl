@@ -3,7 +3,7 @@ import os, sys
 from aiomax.buttons import CallbackButton, MessageButton, KeyboardBuilder
 
 COURSES_NAMES = {"Обучение по продажам": 'sales_training',
-                 "Другой сотрудник": 'nother_employee'}
+                 "Другой сотрудник": 'another_employee'}
 
 def test_abcd_keyboard():
     """
@@ -78,10 +78,11 @@ def change_course_to_export_stat_kb(courses_name: list[str]):
     export_stat_kb = KeyboardBuilder()
     for course_name in courses_name:
         course = COURSES_NAMES.get(course_name)
+        if course_name == "Обучение по продажам":
+            course_name = '📚 ' + course_name
         print(f'{course=}')
-        #export_stat_kb.row(CallbackButton(text=course_name, payload=f'{course}'))
-        export_stat_kb.row(CallbackButton(text=course_name, payload='all_courses'))
-    export_stat_kb.row(CallbackButton(text="По всем курсам", payload="all_courses"))
+        export_stat_kb.row(CallbackButton(text=course_name, payload=f'export_data::{course}'))
+    export_stat_kb.row(CallbackButton(text="🎯 По всем курсам", payload="all_courses"))
     
     print('Успешное формирование клавиатуры')
     return export_stat_kb.to_list()
@@ -132,7 +133,7 @@ def start_test_kb() -> KeyboardBuilder:
 
 
 def main_one_kb() -> KeyboardBuilder:
-    kb = KeyboardBuilder().add(CallbackButton(text="Главное меню", payload="main_menu"))
+    kb = KeyboardBuilder().add(CallbackButton(text="🏠 Главное меню", payload="main_menu"))
     
     return kb
 
