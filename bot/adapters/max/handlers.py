@@ -119,7 +119,7 @@ async def start_command(ctx: CommandContext, cursor: FSMCursor, user_type:str = 
         logger.info(f'[INFO][start_command] Стартовал')
             
         async def change_course_send(text: str):
-            await ctx.send(text, keyboard=change_course_kb(), format="html")
+            await ctx.send(text, keyboard=change_course_kb(), format='markdown')
         
         async def send(text: str, cursor: FSMCursor = cursor):
             state_name = cursor.get_state()
@@ -247,7 +247,7 @@ async def raiting_command(ctx: CommandContext | Callback, cursor: FSMCursor):
             await ctx.send(
                 "📊 **Рейтинг пока пуст**\n\n"
                 "Пройдите обучение, чтобы попасть в рейтинг!",
-                keyboard=main_menu_keyboard(),
+                keyboard=main_menu_keyboard(current_course),
                 format="markdown"
             )
             return
@@ -318,7 +318,7 @@ async def raiting_command(ctx: CommandContext | Callback, cursor: FSMCursor):
         if user_rank == 0:
             rating_text += "\n_Вы ещё не начали обучение. Пройдите первый урок, чтобы попасть в рейтинг!_"
         
-        await ctx.send(rating_text, format="html", keyboard=main_menu_keyboard())
+        await ctx.send(rating_text, format="html", keyboard=main_menu_keyboard(current_course))
         
     except Exception as e:
         logger.error(f'[ERROR][raiting_command] Произошла ошибка {e}')
@@ -371,6 +371,9 @@ async def all_courses_stat_info_handler(ctx: CommandContext, cursor: FSMCursor):
         current_user_result = game.get_info_to_exel_for_user(user_id=int(user_id), education_info=education_info)
         data_to_exel[(user_id, last_first_user_name)] = current_user_result
     
+    logger.info(f'{data_to_exel=}')
+    pprint(data_to_exel)
+    
     excel_gen = ExcelStatisticGenerator(data_to_exel)
     
     file_path = add_timestamp_to_filename()
@@ -402,8 +405,9 @@ async def all_courses_stat_info_handler(ctx: CommandContext, cursor: FSMCursor):
 async def current_course_stat_info_handler(callback: Callback, cursor: FSMCursor):
     course = callback.payload.split('::')[1]
     logger.info(f'{course=}')
+        
+    course_name = next(key for key, value in COURSES_NAMES.items() if value == course)
     
-    course_name = COURSES_NAMES.get(course)
     logger.info(f'{course_name=}')
     
     logger.info(f'Приступаем к формированию статистики прохождения обучения по курсу: {course_name}')
@@ -419,6 +423,41 @@ async def current_course_stat_info_handler(callback: Callback, cursor: FSMCursor
         #del user_data['lesson_results']
         users_data.setdefault(user, user_data)
     pprint(users_data)
+    
+    logger.info(f'Для каждого пользователя получаем результат прохождения обучения по курсам')
+    for user_id, education_info in users_data.items():
+        last_first_user_name = f"{education_info.get('user_info')['last_name']} {education_info.get('user_info')['first_name']}"
+        if user_id not in data_to_exel:
+            data_to_exel.setdefault((user_id, last_first_user_name))
+        current_user_result = game.get_info_to_exel_for_user(user_id=int(user_id), education_info=education_info, course_name=course_name, all_courses_flag=False)
+        data_to_exel[(user_id, last_first_user_name)] = current_user_result
+    
+    logger.info(f'{data_to_exel=}')
+    pprint(data_to_exel)
+    
+    excel_gen = ExcelStatisticGenerator(data_to_exel)
+    
+    file_path = add_timestamp_to_filename()
+    
+    #excel_gen.generate_excel("data/statistics.xlsx")
+    excel_gen.generate_excel(file_path)
+    
+    if not os.path.exists(file_path):
+        await callback.send(f"❌ Файл {file_path} не найден в папке data.")
+        return
+    
+    try:
+        # Открываем файл в бинарном режиме
+        with open(file_path, 'rb') as file:
+            # Отправляем документ в чат
+            attachment = await callback.bot.upload_file(
+                file_path
+            )
+            await callback.send('Статистика прохождения обучения', attachments=attachment)
+        await callback.send("Для продолжения нажмите ниже", keyboard=main_one_kb())
+    except Exception as e:
+        await callback.send(f"❌ Произошла ошибка при отправке файла: {e}")
+
     
         
         
@@ -528,10 +567,11 @@ async def exit_ai_handler(callback: Callback, cursor: FSMCursor):
         #     return
 
         await callback.message.delete()
+        current_course = get_current_course(cursor)
         cursor.clear_state()
         await callback.send(
             "✅ Вы вышли из режима AI-ассистента",
-            keyboard=main_menu_keyboard()
+            keyboard=main_menu_keyboard(current_course)
         )
         return
     
@@ -581,8 +621,9 @@ async def process_ai_question_handler(message: Message, cursor: FSMCursor):
 async def go_to_main_menu_handler(callback: Callback, cursor: FSMCursor):
     """Обработчик нажатия кнопки перехода в Главное меню"""
     try:
+        current_course = get_current_course(cursor)
         cursor.clear()
-        await callback.send("Вернулись в главное меню, выберите одно из действий 👇", keyboard=main_menu_keyboard())
+        await callback.send("Вернулись в главное меню, выберите одно из действий 👇", keyboard=main_menu_keyboard(current_course))
     except Exception as e:
         logger.error(f'[go_to_main_menu_handler] произошла ошибка {e}')    
 
@@ -872,7 +913,7 @@ async def confirm_date_handler(callback: Callback, cursor: FSMCursor):
                 logger.info(f'{state_name=}')
                 cursor.change_state(AnotherEmployerStates.user_type)
             else:
-                await callback.send(text, keyboard=main_menu_keyboard())
+                await callback.send(text, keyboard=main_menu_keyboard(current_course))
                 cursor.clear_state()
                  
         elif callback.payload == "no":  # пользователь отклонил дату
@@ -1579,6 +1620,7 @@ async def continue_after_section6_handler(callback: Callback, cursor: FSMCursor)
     try:
         logger.info(f"[continue_after_section6_handler] Стартовал")
         await callback.message.delete()
+        current_course = get_current_course(cursor)
         # Проверяем загрузку базы знаний
         rag = RAGService()
         stats = rag.get_stats()
@@ -1588,7 +1630,7 @@ async def continue_after_section6_handler(callback: Callback, cursor: FSMCursor)
         if not stats['is_loaded']:
             await callback.send(
                 "❌ База знаний не загружена. Обратитесь к администратору.",
-                keyboard=main_menu_keyboard()
+                keyboard=main_menu_keyboard(current_course)
             )
             cursor.clear()
             return
@@ -2533,6 +2575,7 @@ async def continue_after_block2_handler(callback: Callback, cursor: FSMCursor):
     """Завершение Блока №2 - Клиент и ЦА. Переход к вопросам или финальному тесту"""
     try:
         logger.info(f"[continue_after_block2_handler] Стартовал")
+        current_course = get_current_course(cursor)
         # Проверяем загрузку базы знаний
         rag = RAGService()
         stats = rag.get_stats()
@@ -2540,7 +2583,7 @@ async def continue_after_block2_handler(callback: Callback, cursor: FSMCursor):
         if not stats['is_loaded']:
             await callback.send(
                 "❌ База знаний не загружена. Обратитесь к администратору.",
-                keyboard=main_menu_keyboard()
+                keyboard=main_menu_keyboard(current_course)
             )
             cursor.clear()
             return
@@ -3167,6 +3210,7 @@ async def continue_after_section17_handler(callback: Callback, cursor: FSMCursor
     """Завершение Блока №3 - Продукт. Переход к вопросам или финальному тесту"""
     try:
         logger.info(f"[continue_after_section17_handler] Стартовал")
+        current_course = get_current_course(cursor)
         await callback.message.delete()
         # Проверяем загрузку базы знаний
         rag = RAGService()
@@ -3175,7 +3219,7 @@ async def continue_after_section17_handler(callback: Callback, cursor: FSMCursor
         if not stats['is_loaded']:
             await callback.send(
                 "❌ База знаний не загружена. Обратитесь к администратору.",
-                keyboard=main_menu_keyboard()
+                keyboard=main_menu_keyboard(current_course)
             )
             cursor.clear()
             return
@@ -3194,6 +3238,7 @@ async def continue_after_block3_handler(callback: Callback, cursor: FSMCursor):
     """Завершение Блока №3. Переход к вопросам или финальному тесту"""
     try:
         logger.info(f"[continue_after_block3_handler] Стартовал")
+        current_course = get_current_course(cursor)
         # Проверяем загрузку базы знаний
         rag = RAGService()
         stats = rag.get_stats()
@@ -3201,7 +3246,7 @@ async def continue_after_block3_handler(callback: Callback, cursor: FSMCursor):
         if not stats['is_loaded']:
             await callback.send(
                 "❌ База знаний не загружена. Обратитесь к администратору.",
-                keyboard=main_menu_keyboard()
+                keyboard=main_menu_keyboard(current_course)
             )
             cursor.clear()
             return
@@ -3640,6 +3685,7 @@ async def continue_after_section21_handler(callback: Callback, cursor: FSMCursor
     """Завершение Блока №4. Переход к вопросам или финальному тесту"""
     try:
         logger.info(f"[continue_after_section21_handler] Стартовал")
+        current_course = get_current_course(cursor)
         await callback.message.delete()
         # Проверяем загрузку базы знаний
         rag = RAGService()
@@ -3648,7 +3694,7 @@ async def continue_after_section21_handler(callback: Callback, cursor: FSMCursor
         if not stats['is_loaded']:
             await callback.send(
                 "❌ База знаний не загружена. Обратитесь к администратору.",
-                keyboard=main_menu_keyboard()
+                keyboard=main_menu_keyboard(current_course)
             )
             cursor.clear()
             return
@@ -3668,6 +3714,7 @@ async def continue_after_block4_handler(callback: Callback, cursor: FSMCursor):
     """Завершение Блока №4. Переход к вопросам или финальному тесту"""
     try:
         logger.info(f"[continue_after_block4_handler] Стартовал")
+        current_course = get_current_course(cursor)
         # Проверяем загрузку базы знаний
         rag = RAGService()
         stats = rag.get_stats()
@@ -3675,7 +3722,7 @@ async def continue_after_block4_handler(callback: Callback, cursor: FSMCursor):
         if not stats['is_loaded']:
             await callback.send(
                 "❌ База знаний не загружена. Обратитесь к администратору.",
-                keyboard=main_menu_keyboard()
+                keyboard=main_menu_keyboard(current_course)
             )
             cursor.clear()
             return
@@ -4406,7 +4453,7 @@ async def continue_after_block5_handler(callback: Callback, cursor: FSMCursor):
         if not stats['is_loaded']:
             await callback.send(
                 "❌ База знаний не загружена. Обратитесь к администратору.",
-                keyboard=main_menu_keyboard()
+                keyboard=main_menu_keyboard(current_course)
             )
             cursor.clear()
             return
@@ -4656,7 +4703,7 @@ async def continue_after_block6_handler(callback: Callback, cursor: FSMCursor):
         if not stats['is_loaded']:
             await callback.send(
                 "❌ База знаний не загружена. Обратитесь к администратору.",
-                keyboard=main_menu_keyboard()
+                keyboard=main_menu_keyboard(current_course)
             )
             cursor.clear()
             return
@@ -4870,6 +4917,7 @@ async def continue_after_block7_handler(callback: Callback, cursor: FSMCursor):
     """Блока №7 - Финальный этап обучения. Переход к вопросам или финальному тесту"""
     try:
         logger.info(f"[continue_after_block7_handler] Стартовал")
+        current_course = get_current_course(cursor)
         # Проверяем загрузку базы знаний
         rag = RAGService()
         stats = rag.get_stats()
@@ -4877,7 +4925,7 @@ async def continue_after_block7_handler(callback: Callback, cursor: FSMCursor):
         if not stats['is_loaded']:
             await callback.send(
                 "❌ База знаний не загружена. Обратитесь к администратору.",
-                keyboard=main_menu_keyboard()
+                keyboard=main_menu_keyboard(current_course)
             )
             cursor.clear()
             return

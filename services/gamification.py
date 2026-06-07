@@ -624,15 +624,25 @@ class GamificationService:
                 if not all_courses_flag and attemp.get('course_name') == course_name:
                     logger.info(f'Для пользователя {user_id} обнаружили завершенную попытку пройти курс {course_name}')
                     completed_attempts.append({course_name: attemp})
-                else:
+                elif all_courses_flag:
+                    course_name = attemp.get('course_name')
                     completed_attempts.append({course_name: attemp})
         
         if 'courses' in education_info:
             for course in education_info.get('courses'):
-                if all([course == course_name, education_info.get('courses')[course]['lessons_completed'] != 0, 
-                        education_info.get('courses')[course]['lessons_completed'] != self.total_lessons_info.get(course_name)]):
-                    logger.info(f'Для пользователя {user_id} обнаружили не завершенную попытку пройти курс {course_name}')
-                    not_completed_courses.append({course: education_info.get('courses')[course]})
+                if not all_courses_flag:
+                    if all([course == course_name, education_info.get('courses')[course]['lessons_completed'] != 0, 
+                            education_info.get('courses')[course]['lessons_completed'] != self.total_lessons_info.get(course_name)]):
+                        logger.info(f'Для пользователя {user_id} обнаружили не завершенную попытку пройти курс {course_name}')
+                        not_completed_courses.append({course: education_info.get('courses')[course]})
+                else:
+                    #course_name = list(course.keys()[0])
+                    logger.info(f'Полученный ключ: {course=}')
+                    if all([education_info.get('courses')[course]['lessons_completed'] != 0, 
+                            education_info.get('courses')[course]['lessons_completed'] != self.total_lessons_info.get(course)]):
+                        logger.info(f'Для пользователя {user_id} обнаружили не завершенную попытку пройти курс {course_name}')
+                        not_completed_courses.append({course: education_info.get('courses')[course]})
+                    
         
         result_info.update(completed_attemps=completed_attempts, not_completed_courses=not_completed_courses)
         return result_info

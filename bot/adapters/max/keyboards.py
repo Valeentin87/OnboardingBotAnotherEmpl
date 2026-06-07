@@ -39,7 +39,7 @@ def main_menu_keyboard(educ_button_name:str = "Обучение по прода�
     """
     kb = KeyboardBuilder()
     kb.row(CallbackButton(text="🏢 О компании", payload="about_company"))
-    kb.row(CallbackButton(text=f"📚 {educ_button_name}", payload="education"))
+    kb.row(CallbackButton(text=f"📚 {educ_button_name if educ_button_name != 'Другой сотрудник' else 'Обучение по продукту'}", payload="education"))
     kb.row(
         CallbackButton(text="📊 Мой прогресс", payload="my_progress"),
         CallbackButton(text="🏆 Рейтинг", payload="raiting"),

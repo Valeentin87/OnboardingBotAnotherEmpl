@@ -29,6 +29,59 @@ class ExcelStatisticGenerator:
         except (ValueError, TypeError):
             return "Попытка не завершена"
 
+    # def _extract_data(self) -> List[List[Any]]:
+    #     """
+    #     Извлекает и структурирует данные из словаря статистики.
+    #     :return: список строк для записи в Excel (каждая строка — список значений)
+    #     """
+    #     rows = []
+
+    #     for (user_id, full_name), user_data in self.statistic_data.items():
+    #         # Обработка завершённых попыток
+    #         for course_data in user_data['completed_attemps']:
+    #             for course_name, data in course_data.items():
+    #                 lessons_completed = data['lessons_completed']
+    #                 total_lessons = lessons_completed  # Для завершённых курсов общее число уроков = пройденным
+    #                 accuracy = data['accuracy_percent']
+    #                 date_completed = self._format_date(data['date_completed'])
+
+    #                 rows.append([
+    #             full_name,
+    #             user_id,
+    #             course_name,
+    #             f"{lessons_completed}/{total_lessons}",
+    #             f"{accuracy}%",
+    #             date_completed
+    #         ])
+
+    #         # Обработка незавершённых попыток
+    #         for course_data in user_data['not_completed_courses']:
+    #             for course_name, data in course_data.items():
+    #                 lessons_completed = data['lessons_completed']
+    #                 total_lessons = data['total_lessons']
+    #                 accuracy = data['accuracy_percent']
+
+    #                 rows.append([
+    #                     full_name,
+    #                     user_id,
+    #                     course_name,
+    #                     f"{lessons_completed}/{total_lessons}",
+    #                     f"{accuracy}%",
+    #                     "Попытка не завершена"
+    #                 ])
+
+    #     # Сортировка: сначала по имени (алфавитный порядок), затем по дате (с учётом "Попытка не завершена")
+    #     def sort_key(row):
+    #         name = row[0]
+    #         date = row[5]
+    #         # Помещаем строки с "Попытка не завершена" в конец для каждого пользователя
+    #         date_sort = float('inf') if date == "Попытка не завершена" else datetime.strptime(date, '%d.%m.%Y') if date != "Попытка не завершена" else None
+    #         return (name, date_sort)
+
+    #     rows.sort(key=sort_key)
+    #     return rows
+
+    
     def _extract_data(self) -> List[List[Any]]:
         """
         Извлекает и структурирует данные из словаря статистики.
@@ -40,47 +93,62 @@ class ExcelStatisticGenerator:
             # Обработка завершённых попыток
             for course_data in user_data['completed_attemps']:
                 for course_name, data in course_data.items():
+                    print(f'На этапе формирования итоговых данных для exel документа {course_name=}')
                     lessons_completed = data['lessons_completed']
                     total_lessons = lessons_completed  # Для завершённых курсов общее число уроков = пройденным
                     accuracy = data['accuracy_percent']
                     date_completed = self._format_date(data['date_completed'])
 
                     rows.append([
-                full_name,
-                user_id,
-                course_name,
-                f"{lessons_completed}/{total_lessons}",
-                f"{accuracy}%",
+                        full_name,
+                        user_id,
+                        course_name,
+                        f"{total_lessons if course_name == 'Обучение по продажам' else 7}/{total_lessons if course_name == 'Обучение по продажам' else 7}",
+                        accuracy,
                 date_completed
             ])
 
             # Обработка незавершённых попыток
             for course_data in user_data['not_completed_courses']:
                 for course_name, data in course_data.items():
+                    print(f'На этапе формирования итоговых данных для exel документа {course_name=}')
                     lessons_completed = data['lessons_completed']
                     total_lessons = data['total_lessons']
                     accuracy = data['accuracy_percent']
 
                     rows.append([
                         full_name,
-                        user_id,
-                        course_name,
-                        f"{lessons_completed}/{total_lessons}",
-                        f"{accuracy}%",
-                        "Попытка не завершена"
-                    ])
+                user_id,
+                course_name,
+                f"{total_lessons if course_name == 'Обучение по продажам' else 7}/{total_lessons if course_name == 'Обучение по продажам' else 7}",
+                accuracy,
+                "Попытка не завершена"
+            ])
 
-        # Сортировка: сначала по имени (алфавитный порядок), затем по дате (с учётом "Попытка не завершена")
+        # Сортировка: сначала по имени (алфавитный порядок), затем по дате
         def sort_key(row):
             name = row[0]
-            date = row[5]
-            # Помещаем строки с "Попытка не завершена" в конец для каждого пользователя
-            date_sort = float('inf') if date == "Попытка не завершена" else datetime.strptime(date, '%d.%m.%Y') if date != "Попытка не завершена" else None
-            return (name, date_sort)
+            date_str = row[5]
+
+            if date_str == "Попытка не завершена":
+                # Для незавершённых попыток используем большое число (конец сортировки)
+                date_timestamp = float('inf')
+            else:
+                # Преобразуем строку даты в timestamp для корректного сравнения
+                try:
+                    date_obj = datetime.strptime(date_str, '%d.%m.%Y')
+                    date_timestamp = date_obj.timestamp()
+                except ValueError:
+                    # Если формат даты некорректен, помещаем в конец
+                    date_timestamp = float('inf')
+
+            return (name, date_timestamp)
 
         rows.sort(key=sort_key)
         return rows
 
+    
+    
     def generate_excel(self, filename: str) -> None:
         """
         Создаёт Excel-файл с данными статистики обучения.
